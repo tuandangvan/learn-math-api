@@ -39,4 +39,3 @@ CONNECT_DATABASE()
     console.error(err);
     process.exit(0);
   });
-export default app;
