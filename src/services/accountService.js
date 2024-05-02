@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import Account from '../models/account.js';
+import Account from '../models/accountModel.js';
 import { compareSync, hashSync } from 'bcrypt';
 
 const createAccount = async function (account) {
