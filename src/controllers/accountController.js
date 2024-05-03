@@ -28,7 +28,7 @@ const signIn = async (req, res, next) => {
         const accessToken = await jwtService.generateAuthToken(account);
         const refreshToken = await jwtService.generateRefreshToken(account);
         await accountService.findByIdAndUpdate(account.id, refreshToken);
-        sendSuccess(res, "Create account successfully", { account, accessToken, refreshToken });
+        sendSuccess(res, "Log-in success", { account, accessToken, refreshToken });
 
     } catch (error) {
         sendError(res, error.message, error.stack);

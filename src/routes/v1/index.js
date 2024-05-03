@@ -6,7 +6,7 @@ import { documentRouter } from "./documentRoute";
 
 const router = express.Router();
 
-router.get("/status", (req, res) => {
+router.get("/", (req, res) => {
     res.status(StatusCodes.OK).json({
         message: "API math-learning are ready to use!",
         code: StatusCodes.OK
