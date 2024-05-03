@@ -6,7 +6,7 @@ const generateAuthToken = async function (account) {
       id: account._id,
       email: account.email,
       role: account.role,
-      status: account.status
+      isActive: account.isActive
     },
     env.JWT_SECRET,
     { expiresIn: "1d" }
@@ -19,7 +19,7 @@ const generateRefreshToken = async function (account) {
       id: account._id,
       email: account.email,
       role: account.role,
-      status: account.status
+      isActive: account.isActive
     },
     env.JWT_SECRET,
     { expiresIn: "7d" }

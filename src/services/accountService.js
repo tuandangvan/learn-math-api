@@ -20,8 +20,9 @@ const getAccByEmailPhone = async function (account) {
 }
 
 const findByCredentials = async function ({ account, password }) {
-    const acc = await Account.findOne({ $or: [{ email: account }, { phone: account }]});
-    if (!acc) {po
+    const acc = await Account.findOne({ $or: [{ email: account }, { phone: account }] });
+    if (!acc) {
+        po
         throw new Error("Account not found");
     }
     const isPasswordMatch = compareSync(password, acc.password);
@@ -43,10 +44,15 @@ const findByIdAndUpdate = async function (accountId, refreshToken) {
         });
     return accRefreshToken;
 }
+const findAccountByRefreshToken = async function (refreshToken) {
+    const account = await Account.findOne({ refreshToken });
+    return account;
+}
 
 export const accountService = {
     createAccount,
     getAccByEmailPhone,
     findByCredentials,
-    findByIdAndUpdate
+    findByIdAndUpdate,
+    findAccountByRefreshToken
 }

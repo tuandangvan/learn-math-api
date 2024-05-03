@@ -9,7 +9,7 @@ const sendSuccess = (res, message, data) => {
 };
 
 const sendError = (res, message, error, status = 404) => {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+    res.status(status).json({
         status: status,
         message,
         error,
