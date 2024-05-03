@@ -21,7 +21,7 @@ const getAccByEmailPhone = async function (account) {
 
 const findByCredentials = async function ({ account, password }) {
     const acc = await Account.findOne({ $or: [{ email: account }, { phone: account }]});
-    if (!acc) {
+    if (!acc) {po
         throw new Error("Account not found");
     }
     const isPasswordMatch = compareSync(password, acc.password);
