@@ -15,6 +15,6 @@ router.get("/status", (req, res) => {
 
 router.use("/auth", accountRouter);
 router.use("/class", classRouter);
-router.use("/upload", documentRouter);
+// router.use("/upload", documentRouter);
 
 export const APIs_V1 = router;
