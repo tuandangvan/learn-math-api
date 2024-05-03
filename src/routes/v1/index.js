@@ -2,7 +2,7 @@ import express from "express";
 import { StatusCodes } from "http-status-codes";
 import { accountRouter } from "./accountRoute";
 import { classRouter } from "./classRoute";
-import { documentRouter } from "./documentRoute";
+// import { documentRouter } from "./documentRoute";
 
 const router = express.Router();
 
