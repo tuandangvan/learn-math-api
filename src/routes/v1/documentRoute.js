@@ -7,8 +7,8 @@ import { documentController } from '../../controllers/documentController';
 
 const upload = multer({ dest: 'uploads' });
 const router = express.Router();
-// //general
-// router.post("/document", authencation, permission([Role.ADMIN, Role.TEACHER]), upload.single('file'), documentController.createDocument);
-// router.get("/document/:documentId", documentController.getDocument);
+//general
+router.post("/document", authencation, permission([Role.ADMIN, Role.TEACHER]), upload.single('file'), documentController.createDocument);
+router.get("/document/:documentId", documentController.getDocument);
 
 export const documentRouter = router;
