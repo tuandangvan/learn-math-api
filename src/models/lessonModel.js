@@ -17,6 +17,10 @@ const lessonSchema = Schema(
             ref: "Class",
             default: null
         },
+        description: {
+            type: String,
+            default: ""
+        },
         youtube: {
             type: Array,
             default: [
@@ -25,7 +29,15 @@ const lessonSchema = Schema(
                     default: ""
                 }
             ]
-        }
+        },
+        documentPDF: {
+            name: {
+                type: String,
+            },
+            data: {
+                type: Buffer,
+            }
+        },
 
     },
     {
