@@ -2,8 +2,6 @@ import { StatusCodes } from "http-status-codes";
 import { accountService } from "../services/accountService";
 import { jwtService } from "../utils/jwtUtils";
 import { sendError, sendSuccess } from "../utils/Api";
-import { env } from "../config/environment";
-import getTokenHeader from "../utils/token";
 
 const createAccount = async (req, res, next) => {
     try {
@@ -56,8 +54,19 @@ const refreshToken = async (req, res, next) => {
     }
 };
 
+const getListTeacher = async (req, res, next) => {
+    try {
+        const listTeacher = await accountService.findListTeacher();
+        sendSuccess(res, "Get list teacher successfully", listTeacher);
+    } catch (error) {
+        sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
+    }
+}
+
 export const accountController = {
     createAccount,
     signIn,
-    refreshToken
+    refreshToken,
+    getListTeacher
 }

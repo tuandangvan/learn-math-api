@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import Account from '../models/accountModel.js';
 import { compareSync, hashSync } from 'bcrypt';
+import Role from '../utils/enums.js';
 
 const createAccount = async function (account) {
     account.password = hashSync(account.password, 8);
@@ -22,7 +23,6 @@ const getAccByEmailPhone = async function (account) {
 const findByCredentials = async function ({ account, password }) {
     const acc = await Account.findOne({ $or: [{ email: account }, { phone: account }] });
     if (!acc) {
-        po
         throw new Error("Account not found");
     }
     const isPasswordMatch = compareSync(password, acc.password);
@@ -49,10 +49,22 @@ const findAccountByRefreshToken = async function (refreshToken) {
     return account;
 }
 
+const findListTeacher = async function () {
+    const listTeacher = await Account.find({ role: Role.TEACHER }, "id firstName lastName email phone avatar introduction");
+    return listTeacher;
+}
+
+const findAccountByRole = async function (role, id) {
+    const account = await Account.findOne({ role: role, _id: id });
+    return account;
+}
+
 export const accountService = {
     createAccount,
     getAccByEmailPhone,
     findByCredentials,
     findByIdAndUpdate,
-    findAccountByRefreshToken
+    findAccountByRefreshToken,
+    findListTeacher,
+    findAccountByRole
 }
