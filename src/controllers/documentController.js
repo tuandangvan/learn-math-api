@@ -1,5 +1,4 @@
 import Document from "../models/documentModel";
-// import fs from 'fs';
 import { sendError, sendSuccess } from "../utils/Api";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
@@ -14,10 +13,9 @@ const createDocument = async (req, res, next) => {
         const newPDF = new Document({
             _id: new mongoose.Types.ObjectId(),
             name: req.file.originalname,
-            // data: fs.readFileSync(req.file.path)
+            data: req.file.buffer
         });
         await newPDF.save();
-        // fs.unlinkSync(req.file.path); // Xóa tệp tạm sau khi lưu vào MongoDB
         sendSuccess(res, "Create document successfully", null);
     } catch (error) {
         sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);

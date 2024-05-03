@@ -5,7 +5,9 @@ import Role from '../../utils/enums';
 import multer from 'multer';
 import { documentController } from '../../controllers/documentController';
 
-const upload = multer({ dest: 'uploads' });
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
 const router = express.Router();
 //general
 router.post("/document", authencation, permission([Role.ADMIN, Role.TEACHER]), upload.single('file'), documentController.createDocument);
