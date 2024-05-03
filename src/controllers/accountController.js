@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { accountService } from "../services/account";
+import { accountService } from "../services/accountService";
 import { jwtService } from "../utils/jwtUtils";
 import { sendError, sendSuccess } from "../utils/Api";
 

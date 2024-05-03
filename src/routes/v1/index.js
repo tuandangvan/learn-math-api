@@ -1,6 +1,7 @@
 import express from "express";
 import { StatusCodes } from "http-status-codes";
-import { studentRouter } from "./account";
+import { accountRouter } from "./accountRoute";
+import { classRouter } from "./classRoute";
 
 const router = express.Router();
 
@@ -11,6 +12,7 @@ router.get("/status", (req, res) => {
     });
 });
 
-router.use("/auth", studentRouter);
+router.use("/auth", accountRouter);
+router.use("/class", classRouter);
 
 export const APIs_V1 = router;

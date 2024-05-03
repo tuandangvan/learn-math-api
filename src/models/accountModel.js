@@ -52,6 +52,10 @@ const accountSchema = Schema(
         classId: {
             type: String,
         },
+        introduction: {
+            type: String,
+            default: ""
+        },
         refreshToken: {
             type: String,
             default: ""
