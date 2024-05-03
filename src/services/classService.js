@@ -33,6 +33,12 @@ const studentExist = async function (classId, studentId) {
     return false;
 }
 
+const findListClass = async function () {
+    const listClass = await Class.find({}, "id name teacherIds studentIds textbook thinking advanced FMO description")
+    return listClass;
+}
+
+
 //teacher
 const addTeacher = async function (classId, teacherId) {
     const addTeacher = await Class.updateOne(
@@ -93,6 +99,7 @@ export const classService = {
     //general
     teacherExist,
     studentExist,
+    findListClass,
 
     //teacher
     addTeacher,

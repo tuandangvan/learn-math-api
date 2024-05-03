@@ -1,6 +1,8 @@
 import { StatusCodes } from "http-status-codes";
 import { sendError, sendSuccess } from "../utils/Api";
 import { classService } from "../services/classService";
+import { accountService } from "../services/accountService";
+import Role from "../utils/enums";
 
 //admin
 const createClass = async (req, res, next) => {
@@ -31,9 +33,14 @@ const addTeacher = async (req, res, next) => {
     try {
         const classId = req.params.classId;
         const teacherId = req.body.teacherId;
-        const teacher = await classService.teacherExist(classId, teacherId);
-        if (teacher) {
+        const teacherExist = await classService.teacherExist(classId, teacherId);
+        if (teacherExist) {
             sendError(res, "Teacher has been added", null, StatusCodes.NOT_ACCEPTABLE);
+            return;
+        }
+        const teacher = await accountService.findAccountByRole(Role.TEACHER, teacherId);
+        if (!teacher) {
+            sendError(res, "Teacher not found", null, StatusCodes.NOT_FOUND);
             return;
         }
         await classService.addTeacher(classId, teacherId);
@@ -48,7 +55,12 @@ const removeTeacher = async (req, res, next) => {
     try {
         const classId = req.params.classId;
         const teacherId = req.body.teacherId;
-        const teacher = await classService.teacherExist(classId, teacherId);
+        const teacherExist = await classService.teacherExist(classId, teacherId);
+        if (!teacherExist) {
+            sendError(res, "Teacher not found in class", null, StatusCodes.NOT_FOUND);
+            return;
+        }
+        const teacher = await accountService.findAccountByRole(Role.TEACHER, teacherId);
         if (!teacher) {
             sendError(res, "Teacher not found", null, StatusCodes.NOT_FOUND);
             return;
@@ -66,9 +78,14 @@ const addStudent = async (req, res, next) => {
     try {
         const classId = req.params.classId;
         const studentId = req.body.studentId;
-        const student = await classService.studentExist(classId, studentId);
-        if (student) {
+        const studentExist = await classService.studentExist(classId, studentId);
+        if (studentExist) {
             sendError(res, "Student has been added", null, StatusCodes.NOT_ACCEPTABLE);
+            return;
+        }
+        const student = await accountService.findAccountByRole(Role.STUDENT, studentId);
+        if (!student) {
+            sendError(res, "Student not found", null, StatusCodes.NOT_FOUND);
             return;
         }
         await classService.addStudent(classId, studentId);
@@ -83,7 +100,12 @@ const removeStudent = async (req, res, next) => {
     try {
         const classId = req.params.classId;
         const studentId = req.body.studentId;
-        const student = await classService.studentExist(classId, studentId);
+        const studentExist = await classService.studentExist(classId, studentId);
+        if (!studentExist) {
+            sendError(res, "Student not found", null, StatusCodes.NOT_FOUND);
+            return;
+        }
+        const student = await accountService.findAccountByRole(Role.STUDENT, studentId);
         if (!student) {
             sendError(res, "Student not found", null, StatusCodes.NOT_FOUND);
             return;
@@ -95,13 +117,30 @@ const removeStudent = async (req, res, next) => {
         next();
     }
 }
+
+const getListClass = async (req, res, next) => {
+    try {
+        const listClass = await classService.findListClass();
+        sendSuccess(res, "Get list class successfully", listClass);
+    } catch (error) {
+        sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
+    }
+}
+
+
 export const classController = {
+    //genaral
+    getListClass,
+
     //admin
     createClass,
     editClass,
+
     //teacher
     addTeacher,
     removeTeacher,
+
     //student
     addStudent,
     removeStudent

@@ -36,9 +36,37 @@ const signIn = async (req, res, next) => {
     }
 }
 
+const refreshToken = async (req, res, next) => {
+    try {
+        const refreshToken = req.body.refreshToken;
+        const account = await accountService.findAccountByRefreshToken(refreshToken);
+        if (!account) {
+            sendError(res, "Error", null, StatusCodes.UNPROCESSABLE_ENTITY);
+        }
+        const newaccessToken = await jwtService.generateAuthToken(account);
+        res.status(StatusCodes.OK).json({ newaccessToken });
+    } catch (error) {
+        const customError = new ApiError(
+            StatusCodes.UNPROCESSABLE_ENTITY,
+            error.message
+        );
+        next(customError);
+    }
+};
 
+const getListTeacher = async (req, res, next) => {
+    try {
+        const listTeacher = await accountService.findListTeacher();
+        sendSuccess(res, "Get list teacher successfully", listTeacher);
+    } catch (error) {
+        sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
+    }
+}
 
 export const accountController = {
     createAccount,
-    signIn
+    signIn,
+    refreshToken,
+    getListTeacher
 }

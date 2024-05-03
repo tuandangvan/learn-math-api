@@ -7,6 +7,7 @@ import { classController } from '../../controllers/classController';
 
 const router = express.Router();
 //general
+router.get('/list-class', classController.getListClass);
 
 
 //admin
