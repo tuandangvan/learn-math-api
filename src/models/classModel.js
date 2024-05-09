@@ -20,35 +20,43 @@ const classSchema = Schema(
                 ref: "Account"
             }
         ],
-        textbook:
-            [
-                {
-                    type: Schema.Types.ObjectId,
-                    ref: "Lesson"
-                }
-            ],
-        thinking: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Lesson"
-            }
-        ],
-        advanced: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Lesson"
-            }
-        ],
-        FMO: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Lesson"
-            }
-        ],
         description: {
             type: String,
-            default: ""
+            default: "Chưa cập nhật"
         },
+        books: [{
+            _id: mongoose.Schema.Types.ObjectId,
+            type: {
+                type: String,
+                required: true,
+                enum: ["TEXTBOOK", "THINKING", "ADVANCED", "FMO"],
+                default: "TEXTBOOK",
+                unique: true,
+            },
+            name: {
+                type: String,
+                default: "Toán sách giáo khoa"
+            },
+            description: {
+                type: String,
+                default: "Chưa cập nhật"
+            },
+            image: {
+                type: String,
+                default: "Chưa cập nhật"
+            },
+            chapterIds: [
+                {
+                    type: Schema.Types.ObjectId,
+                    ref: "Chapter"
+                }
+            ]
+
+        }],
+        deleted: {
+            type: Boolean,
+            default: false
+        }
     },
     {
         timestamps: true

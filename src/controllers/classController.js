@@ -73,6 +73,33 @@ const removeTeacher = async (req, res, next) => {
     }
 }
 
+const addBook = async (req, res, next) => {
+    try {
+        const classId = req.params.classId;
+        const book = req.body;
+        await classService.createBook(classId, book);
+        sendSuccess(res, "Add a book into class successfully", null);
+    } catch (error) {
+        sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
+    }
+
+}
+
+const editBook = async (req, res, next) => {
+    try {
+        const classId = req.params.classId;
+        const bookId = req.params.bookId;
+        const book = req.body;
+        await classService.editBook(classId, bookId, book);
+        sendSuccess(res, "Edit a book into class successfully", null);
+    } catch (error) {
+        sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
+    }
+
+}
+
 //student
 const addStudent = async (req, res, next) => {
     try {
@@ -128,10 +155,22 @@ const getListClass = async (req, res, next) => {
     }
 }
 
+const getClass = async (req, res, next) => {
+    try {
+        const classId = req.params.classId;
+        const _class = await classService.findClass(classId);
+        sendSuccess(res, "Get class successfully", _class);
+    } catch (error) {
+        sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
+    }
+}
+
 
 export const classController = {
     //genaral
     getListClass,
+    getClass,
 
     //admin
     createClass,
@@ -140,6 +179,8 @@ export const classController = {
     //teacher
     addTeacher,
     removeTeacher,
+    addBook,
+    editBook,
 
     //student
     addStudent,

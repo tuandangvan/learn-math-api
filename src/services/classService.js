@@ -34,8 +34,16 @@ const studentExist = async function (classId, studentId) {
 }
 
 const findListClass = async function () {
-    const listClass = await Class.find({}, "id name teacherIds studentIds textbook thinking advanced FMO description")
+    const listClass = await Class.find({ deleted: false }, "id name teacherIds studentIds books description")
     return listClass;
+}
+
+const checkClassExist = async function (classId) {
+    //check class exist
+    const bookExist = await Class.findOne({ _id: classId, deleted: false });
+    if (!bookExist) {
+        throw new Error("Class not found");
+    }
 }
 
 
@@ -64,6 +72,45 @@ const removeTeacher = async function (classId, teacherId) {
     return removeTeacher;
 }
 
+const createBook = async function (classId, book) {
+    await checkClassExist(classId);
+    //check book exist in class
+    const bookExistInClass = await Class.findOne({ _id: classId, deleted: false, "books.type": book.type });
+    if (bookExistInClass) {
+        throw new Error("Book exist in class");
+    }
+
+    const newBook = {
+        _id: new mongoose.Types.ObjectId(),
+        ...book
+    }
+    const createBook = await Class.updateOne({ _id: classId },
+        {
+            $push: {
+                books: newBook
+            }
+        })
+    return createBook;
+}
+
+const editBook = async function (classId, bookId, book) {
+    await checkClassExist(classId);
+    const bookExistInClass = await Class.findOne({ _id: classId, "books._id": bookId });
+    if (!bookExistInClass) {
+        throw new Error("Book not found in class");
+    }
+    const editBook = await Class.updateOne({ _id: classId, "books._id": bookId },
+        {
+            $set: {
+                "books.$.type": book.type,
+                "books.$.name": book.name,
+                "books.$.description": book.description,
+                "books.$.image": book.image
+            }
+        });
+    return editBook;
+}
+
 
 //student
 const addStudent = async function (classId, studentId) {
@@ -90,6 +137,11 @@ const removeStudent = async function (classId, studentId) {
     return removeStudent;
 }
 
+const findClass = async function (classId) {
+    await checkClassExist(classId);
+    const _class = await Class.findById(classId);
+    return _class;
+}
 
 export const classService = {
     //admin
@@ -100,12 +152,17 @@ export const classService = {
     teacherExist,
     studentExist,
     findListClass,
+    findClass,
 
     //teacher
     addTeacher,
     removeTeacher,
+    createBook,
+    editBook,
 
     //student
     addStudent,
     removeStudent
 }
+
+export default checkClassExist;
