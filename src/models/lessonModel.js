@@ -17,6 +17,11 @@ const lessonSchema = Schema(
             ref: "Class",
             default: null
         },
+        chapterId: {
+            type: Schema.Types.ObjectId,
+            ref: "Chapter",
+            default: null
+        },
         description: {
             type: String,
             default: ""
@@ -38,6 +43,10 @@ const lessonSchema = Schema(
                 type: Buffer,
             }
         },
+        deleted: {
+            type: Boolean,
+            default: false
+        }
 
     },
     {

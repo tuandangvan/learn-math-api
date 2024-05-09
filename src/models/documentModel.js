@@ -8,6 +8,10 @@ const documentSchema = Schema(
         },
         data: {
             type: Buffer,
+        },
+        deleted: {
+            type: Boolean,
+            default: false
         }
     },
     {
