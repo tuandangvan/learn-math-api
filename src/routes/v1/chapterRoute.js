@@ -14,6 +14,9 @@ router.put("/:chapterId", authencation, permission([Role.ADMIN, Role.TEACHER]), 
 router.delete("/:chapterId", authencation, permission([Role.ADMIN, Role.TEACHER]), chapterController.deleteChapter);
 
 
+
+
+
 //lesson
 router.post("/:chapterId/lesson", authencation, permission([Role.ADMIN, Role.TEACHER]), lessonController.createLesson);
 router.put("/:chapterId/lesson/:lessonId", authencation, permission([Role.ADMIN, Role.TEACHER]), lessonController.editLesson);

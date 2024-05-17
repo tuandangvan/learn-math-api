@@ -30,6 +30,7 @@ const findByCredentials = async function ({ account, password }) {
         throw new Error("Wrong password");
     }
     acc.password = undefined;
+    acc.refreshToken = undefined;
     return acc;
 };
 
