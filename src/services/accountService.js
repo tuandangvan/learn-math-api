@@ -51,7 +51,7 @@ const findAccountByRefreshToken = async function (refreshToken) {
 }
 
 const findListTeacher = async function () {
-    const listTeacher = await Account.find({ role: Role.TEACHER }, "id firstName lastName email phone avatar introduction");
+    const listTeacher = await Account.find({ role: Role.TEACHER }, "id firstName lastName email phone avatar sex introduction");
     return listTeacher;
 }
 
