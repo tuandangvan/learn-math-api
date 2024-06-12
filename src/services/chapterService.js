@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import Chapter from "../models/chapterModel"
 import Class from "../models/classModel";
 import checkClassExist from "./classService";
+import Exam from "../models/examModel";
 
 
 const createChapter = async function (chapter) {
@@ -67,10 +68,25 @@ const findBook = async function (bookId) {
     return book;
 }
 
+const addExamToLesson = async function (chapterId, lessonId, examId) {
+    const chapter = await Chapter.findOne({ _id: chapterId, "lessons._id": lessonId });
+    if (!chapter) {
+        await Exam.deleteOne({ _id: examId });
+
+        throw new Error("Chapter or lesson not found");
+    }
+
+    const addExam = await Chapter.updateOne(
+        { _id: chapterId, "lessons._id": lessonId },
+        { $push: { "lessons.$.examIds": examId } });
+    return addExam;
+}
+
 export const chapterService = {
     createChapter,
     editChapter,
     deleteChapter,
     findChapter,
-    findBook
+    findBook,
+    addExamToLesson
 }
