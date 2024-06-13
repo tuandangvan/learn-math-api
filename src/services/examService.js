@@ -19,7 +19,17 @@ const editExam = async function (examId, data) {
     return editExam;
 }
 
+const deleteExam = async function (examId) {
+    const exam = await Exam.findById(examId);
+    if (!exam) {
+        throw new Error('Exam not found');
+    }
+    const deleteExam = await Exam.updateOne({ _id: examId }, { $set: { deleted: true } });
+    return deleteExam;
+}
+
 export const examService = {
     createExam,
-    editExam
+    editExam,
+    deleteExam
 }

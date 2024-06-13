@@ -72,7 +72,6 @@ const addExamToLesson = async function (chapterId, lessonId, examId) {
     const chapter = await Chapter.findOne({ _id: chapterId, "lessons._id": lessonId });
     if (!chapter) {
         await Exam.deleteOne({ _id: examId });
-
         throw new Error("Chapter or lesson not found");
     }
 
