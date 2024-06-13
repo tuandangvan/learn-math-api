@@ -58,14 +58,17 @@ const chapterSchema = Schema(
                         default: ""
                     }
                 },
+                examIds: [
+                    {
+                        type: Schema.Types.ObjectId,
+                        ref: "Exam"
+                    }
+                ],
                 deleted: {
                     type: Boolean,
                     default: false
                 },
-                deleted: {
-                    type: Boolean,
-                    default: false
-                },
+
             },
             {
                 timestamps: true
