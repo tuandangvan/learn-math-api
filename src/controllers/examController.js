@@ -57,9 +57,21 @@ const getListExam = async (req, res, next) => {
     }
 }
 
+const getExamById = async (req, res, next) => {
+    try {
+        const examId = req.params.examId;
+        const exam = await examService.getExamById(examId);
+        sendSuccess(res, "Get exam successfully", exam);
+    } catch (error) {
+        sendError(res, error.message, error.stack, 400);
+        next();
+    }
+}
+
 export const examController = {
     createExam,
     editExam,
     deleteExam,
-    getListExam
+    getListExam,
+    getExamById
 }

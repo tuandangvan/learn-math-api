@@ -34,11 +34,21 @@ const getListExam = async function (type) {
     return exams;
 }
 
+const getExamById = async function (examId) {
+    const exam = await Exam.findOne({ _id: examId, active: true, deleted: false }, { deleted: 0 });
+    if (!exam) {
+        throw new Error('Exam not found');
+    }
+    await Exam.updateOne({ _id: examId }, { $set: { view: exam.view + 1 } });
+    exam.view += 1;
+    return exam;
+}
 
 
 export const examService = {
     createExam,
     editExam,
     deleteExam,
-    getListExam
+    getListExam,
+    getExamById
 }
