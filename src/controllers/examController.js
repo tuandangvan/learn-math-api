@@ -43,12 +43,23 @@ const deleteExam = async (req, res, next) => {
     } catch (error) {
         sendError(res, error.message, error.stack, 400);
         next();
+    }
+}
 
+const getListExam = async (req, res, next) => {
+    try {
+        const type = req.query.type;
+        const exams = await examService.getListExam(type);
+        sendSuccess(res, "Get list exam successfully", exams);
+    } catch (error) {
+        sendError(res, error.message, error.stack, 400);
+        next();
     }
 }
 
 export const examController = {
     createExam,
     editExam,
-    deleteExam
+    deleteExam,
+    getListExam
 }

@@ -28,8 +28,17 @@ const deleteExam = async function (examId) {
     return deleteExam;
 }
 
+// Get list exam for all user
+const getListExam = async function (type) {
+    const exams = await Exam.find({ type: type, active: true, deleted: false }, { questions: 0, deleted: 0 });
+    return exams;
+}
+
+
+
 export const examService = {
     createExam,
     editExam,
-    deleteExam
+    deleteExam,
+    getListExam
 }
