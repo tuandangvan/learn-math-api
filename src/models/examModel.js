@@ -54,6 +54,7 @@ const examSchema = Schema(
         },
         questions: [
             {
+                _id: false,
                 sentenceNumber: {
                     type: Number,
                     required: true,
@@ -74,6 +75,7 @@ const examSchema = Schema(
                 ],
                 answers: [
                     {
+                        _id: false,
                         content: {
                             type: String,
                             required: false,

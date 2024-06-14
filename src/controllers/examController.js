@@ -1,4 +1,5 @@
 import { chapterService } from "../services/chapterService";
+import { classService } from "../services/classService";
 import { examService } from "../services/examService";
 import { sendError, sendSuccess } from "../utils/Api";
 import getTokenHeader from "../utils/token";
@@ -7,6 +8,7 @@ const createExam = async (req, res, next) => {
     try {
         const data = req.body;
         const acc = getTokenHeader(res, req, next);
+        await classService.findClass(data.classId);
         const newExam = await examService.createExam(data, acc.id);
         if (newExam) {
             if (data.type === "LESSON") {

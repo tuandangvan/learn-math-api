@@ -12,11 +12,13 @@ const accountSchema = Schema(
         },
         password: {
             type: String,
-            required: true
+            required: true,
+            trim: true
         },
         phone: {
             type: String,
             required: true,
+            trim: true
         },
         role: {
             type: String,
@@ -48,6 +50,7 @@ const accountSchema = Schema(
         address: {
             type: String,
             required: true,
+            trim: true
         },
         classId: {
             type: String,

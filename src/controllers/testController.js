@@ -1,7 +1,7 @@
 import { examService } from "../services/examService";
-import { sendError } from "../utils/Api";
+import { testService } from "../services/testService";
+import { sendError, sendSuccess } from "../utils/Api";
 import getTokenHeader from "../utils/token";
-
 
 const takeExam = async (req, res, next) => {
     try {
@@ -16,18 +16,18 @@ const takeExam = async (req, res, next) => {
         _test.point = 0;
         _test.correct = 0;
         _test.total = 0;
-
-
+        _test.createBy = createBy;
+        _test.examId = examId;
         for (var i = 0; i < exam.questions.length; i++) {
             if (exam.questions[i].typeQ === "CHOICE") {
-                _test.total += 1;                    
+                _test.total += 1;
                 if (_test.answers[i].result[0].answer == exam.questions[i].answers[0].correct) {
                     _test.answers[i].result[0].correct = true;
                     _test.answers[i].result[0].point = exam.questions[i].answers[0].point;
                     _test.point += exam.questions[i].answers[0].point;
                     _test.correct += 1;
 
-                } else {                    
+                } else {
                     _test.answers[i].result[0].correct = false;
                     _test.answers[i].result[0].point = 0;
                 }
@@ -39,7 +39,6 @@ const takeExam = async (req, res, next) => {
                         _test.answers[i].result[j].point = exam.questions[i].answers[j].point;
                         _test.point += exam.questions[i].answers[j].point;
                         _test.correct += 1;
-                        console.log(_test.answers[i].result[j].answer)
                     } else {
                         _test.answers[i].result[j].correct = false;
                         _test.answers[i].result[j].point = 0;
@@ -47,12 +46,33 @@ const takeExam = async (req, res, next) => {
                 }
             }
         }
+        const result = await testService.createTest(_test);
+        await examService.updateAttempts(examId);
+        sendSuccess(res, "Take exam successfully", result);
+    } catch (error) {
+        sendError(res, error.message, error.stack, 404);
+        next();
+    }
+}
 
-        console.log(_test);
+const getTestsExam = async (req, res, next) => {
+    try {
+        const examId = req.params.examId;
+        const acc = getTokenHeader(res, req, next);
+        const createBy = acc.id;
+        const tests = await testService.getTestsExam(examId, createBy);
+        sendSuccess(res, "Get test success", tests);
+    } catch (error) {
+        sendError(res, error.message, error.stack, 404);
+        next();
+    }
+}
 
-
-
-        // res.status(200).json(_test);
+const getTestById = async (req, res, next) => {
+    try {
+        const testId = req.params.testId;
+        const test = await testService.getTestById(testId);
+        sendSuccess(res, "Get test success", test);
     } catch (error) {
         sendError(res, error.message, error.stack, 404);
         next();
@@ -60,5 +80,8 @@ const takeExam = async (req, res, next) => {
 }
 
 export const testController = {
-    takeExam
+    takeExam,
+    getTestsExam,
+    getTestById
+
 }

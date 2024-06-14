@@ -32,7 +32,8 @@ const testSchema = Schema(
             required: true,
         },
         answers: [
-            {
+            {   
+                _id: false,
                 sentenceNumber: {
                     type: Number,
                     required: true,
@@ -44,6 +45,7 @@ const testSchema = Schema(
                 },
                 result: [
                     {
+                        _id: false,
                         answer: {
                             type: String,
                             required: true,
@@ -79,7 +81,7 @@ const testSchema = Schema(
     }
 );
 
-const Test = mongoose.model("Exam", testSchema);
+const Test = mongoose.model("Test", testSchema);
 
 
 export default Test;
