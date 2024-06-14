@@ -39,8 +39,18 @@ const getExamById = async function (examId) {
     if (!exam) {
         throw new Error('Exam not found');
     }
+    exam.questions.forEach(question => {
+        question.answers.forEach(answer => {
+            answer.correct = undefined;
+        });
+    });
     await Exam.updateOne({ _id: examId }, { $set: { view: exam.view + 1 } });
     exam.view += 1;
+    return exam;
+}
+
+const findExamById = async function (examId) {
+    const exam = await Exam.findOne({ _id: examId, active: true, deleted: false });
     return exam;
 }
 
@@ -50,5 +60,6 @@ export const examService = {
     editExam,
     deleteExam,
     getListExam,
-    getExamById
+    getExamById,
+    findExamById
 }

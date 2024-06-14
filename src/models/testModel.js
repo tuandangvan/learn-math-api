@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const examSchema = Schema(
+const testSchema = Schema(
     {
         _id: mongoose.Schema.Types.ObjectId,
         type: {
@@ -13,23 +13,15 @@ const examSchema = Schema(
             required: true,
             ref: "Class"
         },
+        examId: {
+            type: Schema.Types.ObjectId,
+            required: true,
+            ref: "Exam"
+        },
         createBy: {
             type: Schema.Types.ObjectId,
             required: true,
             ref: "Account"
-        },
-        name: {
-            type: String,
-            required: true,
-            trim: true,
-        },
-        description: {
-            type: String,
-            required: false,
-        },
-        time: {
-            type: Number,
-            required: true, //unit: minutes
         },
         startTime: {
             type: Date,
@@ -39,20 +31,7 @@ const examSchema = Schema(
             type: Date,
             required: true,
         },
-        active: {
-            type: Boolean,
-            default: true,
-        },
-        view: {
-            type: Number,
-            default: 0,
-        },
-        numberOfAttempts: {
-            type: Number,
-            required: true,
-            default: 0
-        },
-        questions: [
+        answers: [
             {
                 sentenceNumber: {
                     type: Number,
@@ -63,46 +42,45 @@ const examSchema = Schema(
                     required: true,
                     enum: ["CHOICE", "FREETEXT"],
                 },
-                content: {
-                    type: String,
-                    required: false,
-                },
-                images: [
+                result: [
                     {
-                        type: String,
-                    }
-                ],
-                answers: [
-                    {
-                        content: {
-                            type: String,
-                            required: false,
-                        },
-                        correct: {
+                        answer: {
                             type: String,
                             required: true,
+                        },
+                        correct: {
+                            type: Boolean,
+                            required: false,
                         },
                         point: {
                             type: Number,
-                            required: true,
+                            required: false,
+                            default: 0
                         }
                     }
                 ],
             }
         ],
-        deleted: {
-            type: Boolean,
-            default: false
+        correct: {
+            type: Number,
+            required: true,
+        },
+        total: {
+            type: Number,
+            required: true,
+        },
+        point: {
+            type: Number,
+            required: true,
         }
-
     },
     {
         timestamps: true
     }
 );
 
-const Exam = mongoose.model("Exam", examSchema);
+const Test = mongoose.model("Exam", testSchema);
 
 
-export default Exam;
+export default Test;
 
