@@ -10,6 +10,7 @@ const getTokenHeader = function (res, req, next) {
         return decodeToken;
     } catch (error) {
         sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
     }
 };
 

@@ -31,7 +31,6 @@ const classSchema = Schema(
                 required: true,
                 enum: ["TEXTBOOK", "THINKING", "ADVANCED", "FMO"],
                 default: "TEXTBOOK",
-                unique: true,
             },
             name: {
                 type: String,
