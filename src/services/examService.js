@@ -53,6 +53,14 @@ const findExamById = async function (examId) {
     const exam = await Exam.findOne({ _id: examId, active: true, deleted: false });
     return exam;
 }
+const updateAttempts = async function (examId) {
+    const exam = await Exam.findById(examId);
+    if (!exam) {
+        throw new Error('Exam not found');
+    }
+    const updateAttempts = await Exam.updateOne({ _id: examId }, { $inc: { numberOfAttempts: 1 } });
+    return updateAttempts;
+}
 
 
 export const examService = {
@@ -61,5 +69,6 @@ export const examService = {
     deleteExam,
     getListExam,
     getExamById,
-    findExamById
+    findExamById,
+    updateAttempts
 }
