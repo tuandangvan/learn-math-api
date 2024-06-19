@@ -62,7 +62,7 @@ const findChapter = async function (chapterId) {
 }
 
 const findBook = async function (bookId) {
-    const book = await Chapter.findOne({ bookId: bookId, deleted: false })
+    const book = await Chapter.find({ bookId: bookId, deleted: false })
         .populate("teacherId", "firstName lastName avatar introduction email phone")
         .populate("classId", "name description image");
     return book;
