@@ -64,9 +64,41 @@ const getListTeacher = async (req, res, next) => {
     }
 }
 
+const getTeacherById = async (req, res, next) => {
+    try {
+        const accountId = req.params.id;
+        const account = await accountService.findAccountById(accountId);
+        if (account.role != "TEACHER") {
+            sendError(res, "Account not found", null, StatusCodes.UNPROCESSABLE_ENTITY);
+        }
+        sendSuccess(res, "Get account successfully", account);
+    } catch (error) {
+        sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
+    }
+
+}
+
+const getStudentById = async (req, res, next) => {
+    try {
+        const accountId = req.params.id;
+        const account = await accountService.findAccountById(accountId);
+        if (account.role != "STUDENT") {
+            sendError(res, "Account not found", null, StatusCodes.UNPROCESSABLE_ENTITY);
+        }
+        sendSuccess(res, "Get account successfully", account);
+    } catch (error) {
+        sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
+    }
+
+}
+
 export const accountController = {
     createAccount,
     signIn,
     refreshToken,
-    getListTeacher
+    getListTeacher,
+    getTeacherById,
+    getStudentById
 }

@@ -60,6 +60,14 @@ const findAccountByRole = async function (role, id) {
     return account;
 }
 
+const findAccountById = async function (accountId) {
+    const account = await Account.findOne({ _id: accountId });
+    account.password = undefined;
+    account.refreshToken = undefined;
+    account.deleted = undefined;
+    return account;
+}
+
 export const accountService = {
     createAccount,
     getAccByEmailPhone,
@@ -67,5 +75,6 @@ export const accountService = {
     findByIdAndUpdate,
     findAccountByRefreshToken,
     findListTeacher,
-    findAccountByRole
+    findAccountByRole,
+    findAccountById
 }
