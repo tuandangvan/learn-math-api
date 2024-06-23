@@ -6,6 +6,7 @@ import { documentRouter } from "./documentRoute";
 import { chapterRouter } from "./chapterRoute";
 import { examRouter } from "./examRoute";
 import { testRouter } from "./testRoute";
+import { userRouter } from "./userRoute";
 
 const router = express.Router();
 
@@ -17,6 +18,7 @@ router.get("/status", (req, res) => {
 });
 
 router.use("/auth", accountRouter);
+router.use("/user", userRouter);
 router.use("/class", classRouter);
 router.use("/upload", documentRouter);
 router.use("/chapter", chapterRouter);
