@@ -1,3 +1,4 @@
+import { env } from "../config/environment";
 import Document from "../models/documentModel";
 import { sendError, sendSuccess } from "../utils/Api";
 import { StatusCodes } from "http-status-codes";
@@ -16,7 +17,12 @@ const createDocument = async (req, res, next) => {
             data: req.file.buffer
         });
         await newPDF.save();
-        sendSuccess(res, "Create document successfully", null);
+
+        const HOSTING = env.HOSTING || "https://learn-math-api.vercel.app/api/v1";
+
+        sendSuccess(res, "Create document successfully", {
+            link: HOSTING + `/upload/document/${newPDF._id}`
+        });
     } catch (error) {
         sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
     }
