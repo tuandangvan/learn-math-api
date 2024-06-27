@@ -7,6 +7,7 @@ import { chapterRouter } from "./chapterRoute";
 import { examRouter } from "./examRoute";
 import { testRouter } from "./testRoute";
 import { userRouter } from "./userRoute";
+import { uploadRoute } from "./uploadRoute";
 
 const router = express.Router();
 
@@ -24,5 +25,6 @@ router.use("/upload", documentRouter);
 router.use("/chapter", chapterRouter);
 router.use("/exam", examRouter);
 router.use("/test", testRouter);
+router.use('/image', uploadRoute)
 
 export const APIs_V1 = router;
