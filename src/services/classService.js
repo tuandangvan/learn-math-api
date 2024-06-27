@@ -34,7 +34,7 @@ const studentExist = async function (classId, studentId) {
 }
 
 const findListClass = async function () {
-    const listClass = await Class.find({ deleted: false }, "id name teacherIds studentIds description");
+    const listClass = await Class.find({ deleted: false }, "id name teacherIds studentIds description image");
     return listClass;
 }
 
