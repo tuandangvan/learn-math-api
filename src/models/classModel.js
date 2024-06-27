@@ -24,6 +24,10 @@ const classSchema = Schema(
             type: String,
             default: "Chưa cập nhật"
         },
+        image: {
+            type: String,
+            default: "Chưa cập nhật"
+        },
         books: [{
             _id: mongoose.Schema.Types.ObjectId,
             type: {
