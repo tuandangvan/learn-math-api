@@ -111,6 +111,19 @@ const changePassword = async (req, res, next) => {
     }
 }
 
+const editAccount = async (req, res, next) => {
+    try {
+        const acc = getTokenHeader(res, req, next);
+        const data = req.body;
+        await accountService.updateAccount(acc.id, data);
+        sendSuccess(res, "Update account successfully");
+    } catch (error) {
+        sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
+    }
+
+}
+
 
 
 export const accountController = {
@@ -120,5 +133,6 @@ export const accountController = {
     getListTeacher,
     getTeacherById,
     getStudentById,
-    changePassword
+    changePassword,
+    editAccount
 }
