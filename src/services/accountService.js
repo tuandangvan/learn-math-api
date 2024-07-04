@@ -68,6 +68,13 @@ const findAccountById = async function (accountId) {
     return account;
 }
 
+const updateAccount = async function (accountId, data) {
+    const accountUpdate = await Account.updateOne({ _id: accountId }, { $set: { ...data } });
+    return accountUpdate;
+}
+
+
+
 export const accountService = {
     createAccount,
     getAccByEmailPhone,
@@ -76,5 +83,6 @@ export const accountService = {
     findAccountByRefreshToken,
     findListTeacher,
     findAccountByRole,
-    findAccountById
+    findAccountById,
+    updateAccount
 }

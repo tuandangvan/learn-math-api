@@ -2,6 +2,8 @@ import { StatusCodes } from "http-status-codes";
 import { accountService } from "../services/accountService";
 import { jwtService } from "../utils/jwtUtils";
 import { sendError, sendSuccess } from "../utils/Api";
+import getTokenHeader from "../utils/token";
+import { hashSync } from "bcrypt";
 
 const createAccount = async (req, res, next) => {
     try {
@@ -94,11 +96,29 @@ const getStudentById = async (req, res, next) => {
 
 }
 
+const changePassword = async (req, res, next) => {
+    try {
+        const acc = getTokenHeader(res, req, next);
+        const password = req.body.password;
+        const newPassword = req.body.newPassword;
+        await accountService.findByCredentials({ account: acc.email, password: password });
+        const passHash = hashSync(newPassword, 8);
+        await accountService.updateAccount(acc.id, { password: passHash });
+        sendSuccess(res, "Change password successfully");
+    } catch (error) {
+        sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
+    }
+}
+
+
+
 export const accountController = {
     createAccount,
     signIn,
     refreshToken,
     getListTeacher,
     getTeacherById,
-    getStudentById
+    getStudentById,
+    changePassword
 }
