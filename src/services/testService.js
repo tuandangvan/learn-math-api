@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import Test from '../models/testModel';
 
 const createTest = async function (data) {
+    console.log(data.answers);
     const newTest = new Test({
         _id: new mongoose.Types.ObjectId(),
         ...data
@@ -19,7 +20,6 @@ const getTestsExam = async function (examId, createBy) {
 }
 
 const getTestById = async function (testId) {
-    console.log(testId);
     const test = await Test.findOne({ _id: testId })
         .populate('examId', 'id name')
         .populate('createBy', 'id firstName lastName avatar')
@@ -27,8 +27,14 @@ const getTestById = async function (testId) {
     return test;
 }
 
+const pushAnswer = async function (testId, test) {
+    const test_update = await Test.updateOne({ _id: testId, $set: { ...test } });
+    return test_update;
+}
+
 export const testService = {
     createTest,
     getTestsExam,
-    getTestById
+    getTestById,
+    pushAnswer
 }

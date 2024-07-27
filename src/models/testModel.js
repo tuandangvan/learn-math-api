@@ -29,18 +29,15 @@ const testSchema = Schema(
         },
         endTime: {
             type: Date,
-            required: true,
         },
         answers: [
-            {   
+            {
                 _id: false,
                 sentenceNumber: {
                     type: Number,
-                    required: true,
                 },
                 typeQ: {
                     type: String,
-                    required: true,
                     enum: ["CHOICE", "FREETEXT"],
                 },
                 result: [
@@ -64,16 +61,19 @@ const testSchema = Schema(
             }
         ],
         correct: {
-            type: Number,
-            required: true,
+            type: Number
         },
         total: {
-            type: Number,
-            required: true,
+            type: Number
         },
         point: {
-            type: Number,
+            type: Number
+        },
+        status: {
+            type: String,
             required: true,
+            enum: ["PENDING", "FINISHED"],
+            default: "PENDING"
         }
     },
     {
