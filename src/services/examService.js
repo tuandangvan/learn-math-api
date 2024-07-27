@@ -29,9 +29,14 @@ const deleteExam = async function (examId) {
 }
 
 // Get list exam for all user
-const getListExam = async function (type) {
-    const exams = await Exam.find({ type: type, active: true, deleted: false }, { questions: 0, deleted: 0 });
-    return exams;
+const getListExam = async function (type, classId) {
+    if (classId && type == 'LESSON') {
+        const exams = await Exam.find({ type: type, classId: classId, active: true, deleted: false }, { questions: 0, deleted: 0 });
+        return exams;
+    } else {
+        const exams = await Exam.find({ type: type, active: true, deleted: false }, { questions: 0, deleted: 0 });
+        return exams;
+    }
 }
 
 const getExamById = async function (examId, page, limit) {
@@ -65,14 +70,15 @@ const findExamById = async function (examId) {
     const exam = await Exam.findOne({ _id: examId, active: true, deleted: false });
     return exam;
 }
-const updateAttempts = async function (examId) {
-    const exam = await Exam.findById(examId);
-    if (!exam) {
-        throw new Error('Exam not found');
-    }
-    const updateAttempts = await Exam.updateOne({ _id: examId }, { $inc: { numberOfAttempts: 1 } });
-    return updateAttempts;
-}
+// const updateAttempts = async function (examId) {
+//     const exam = await Exam.findById(examId);
+//     if (!exam) {
+//         throw new Error('Exam not found');
+//     }
+//     const updateAttempts = await Exam.updateOne({ _id: examId }, { $inc: { numberOfAttempts: 1 } });
+//     return updateAttempts;
+// }
+
 
 
 export const examService = {
@@ -82,5 +88,5 @@ export const examService = {
     getListExam,
     getExamById,
     findExamById,
-    updateAttempts
+    // updateAttempts
 }

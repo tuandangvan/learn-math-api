@@ -11,11 +11,11 @@ const createExam = async (req, res, next) => {
         const acc = getTokenHeader(res, req, next);
         await classService.findClass(data.classId);
         const newExam = await examService.createExam(data, acc.id);
-        if (newExam) {
-            if (data.type === "LESSON") {
-                await chapterService.addExamToLesson(data.chapterId, data.lessonId, newExam._id);
-            }
-        }
+        // if (newExam) {
+        //     if (data.type === "LESSON") {
+        //         await chapterService.addExamToLesson(data.chapterId, data.lessonId, newExam._id);
+        //     }
+        // }
         sendSuccess(res, "Create exam successfully", null);
     } catch (error) {
         sendError(res, error.message, error.stack, 400);
@@ -52,7 +52,8 @@ const deleteExam = async (req, res, next) => {
 const getListExam = async (req, res, next) => {
     try {
         const type = req.query.type;
-        const exams = await examService.getListExam(type);
+        const classId = req.query.classId || null;
+        const exams = await examService.getListExam(type, classId);
         sendSuccess(res, "Get list exam successfully", exams);
     } catch (error) {
         sendError(res, error.message, error.stack, 400);
