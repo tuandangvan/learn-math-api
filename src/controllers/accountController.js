@@ -123,6 +123,16 @@ const editAccount = async (req, res, next) => {
     }
 
 }
+const getProfile = async (req, res, next) => {
+    try {
+        const acc = getTokenHeader(res, req, next);
+        const account = await accountService.findAccountById(acc.id);
+        sendSuccess(res, "Get profile successfully", account);
+    } catch (error) {
+        sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
+    }
+}
 
 
 
@@ -134,5 +144,6 @@ export const accountController = {
     getTeacherById,
     getStudentById,
     changePassword,
-    editAccount
+    editAccount,
+    getProfile
 }

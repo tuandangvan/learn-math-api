@@ -166,11 +166,23 @@ const getClass = async (req, res, next) => {
     }
 }
 
+const getBook_Chapter_Lesson = async (req, res, next) => {
+    try {
+        const classId = req.params.classId;
+        const book_chapter_lesson = await classService.getBook_Chapter_Lesson(classId);
+        sendSuccess(res, "Get book, chapter, lesson successfully", book_chapter_lesson);
+    } catch (error) {
+        sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
+    }
+}
+
 
 export const classController = {
     //genaral
     getListClass,
     getClass,
+    getBook_Chapter_Lesson,
 
     //admin
     createClass,

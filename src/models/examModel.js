@@ -13,6 +13,10 @@ const examSchema = Schema(
             required: true,
             ref: "Class"
         },
+        bookId: {
+            type: Schema.Types.ObjectId,
+            required: true,
+        },
         createBy: {
             type: Schema.Types.ObjectId,
             required: true,

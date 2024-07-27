@@ -13,6 +13,7 @@ router.post('/refresh-token', accountController.refreshToken);
 router.get('/list-teacher', accountController.getListTeacher);
 router.put('/password', authencation, accountController.changePassword);
 router.put('/profile', authencation, accountController.editAccount);
+router.get('/profile/account', authencation, accountController.getProfile);
 
 //admin
 router.post('/create/teacher', authencation, permission(Role.ADMIN), accountController.createAccount);
