@@ -1,3 +1,4 @@
+import { StatusCodes } from "http-status-codes";
 import { chapterService } from "../services/chapterService";
 import { classService } from "../services/classService";
 import { examService } from "../services/examService";
@@ -62,8 +63,16 @@ const getListExam = async (req, res, next) => {
 const getExamById = async (req, res, next) => {
     try {
         const examId = req.params.examId;
-        const exam = await examService.getExamById(examId);
-        sendSuccess(res, "Get exam successfully", exam);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 5;
+        const exam = await examService.getExamById(examId, page, limit);
+        res.status(StatusCodes.OK).json({
+            status: StatusCodes.OK,
+            message: "Get exam successfully",
+            data: exam.exam,
+            page: page,
+            total: Math.ceil(exam.count / limit)
+        });
     } catch (error) {
         sendError(res, error.message, error.stack, 400);
         next();
