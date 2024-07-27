@@ -143,6 +143,13 @@ const findClass = async function (classId) {
     return _class;
 }
 
+const getBook_Chapter_Lesson = async function (classId) {
+    const book = await Class.find({ _id: classId, deleted: false })
+        .select("books")
+        .populate("books.chapterIds", "name");
+    return book;
+}
+
 export const classService = {
     //admin
     createClass,
@@ -153,6 +160,7 @@ export const classService = {
     studentExist,
     findListClass,
     findClass,
+    getBook_Chapter_Lesson,
 
     //teacher
     addTeacher,

@@ -8,6 +8,10 @@ const testSchema = Schema(
             required: true,
             enum: ["LESSON", "TEST", "EXAM"],
         },
+        name: {
+            type: String,
+            required: true,
+        },
         classId: {
             type: Schema.Types.ObjectId,
             required: true,
