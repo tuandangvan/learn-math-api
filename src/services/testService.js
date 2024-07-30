@@ -27,7 +27,8 @@ const getTestById = async function (testId) {
 }
 
 const pushAnswer = async function (testId, test) {
-    const test_update = await Test.updateOne({ _id: testId, $set: { ...test } });
+    const { _id, ...testWithoutId } = test;
+    const test_update = await Test.updateOne({ _id: testId }, { $set: testWithoutId });
     return test_update;
 }
 

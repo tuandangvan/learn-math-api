@@ -87,6 +87,11 @@ const findTeacherOfClass = async function (classId) {
     return teacher;
 }
 
+const findClassByAccountId = async function (accountId) {
+    const account = await Account.findOne({ _id: accountId });
+    return account.classId;
+}
+
 
 
 export const accountService = {
@@ -101,5 +106,6 @@ export const accountService = {
     findAccountById,
     updateAccount,
     findStudentOfClass,
-    findTeacherOfClass
+    findTeacherOfClass,
+    findClassByAccountId
 }
