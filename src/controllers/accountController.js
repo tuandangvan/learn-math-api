@@ -144,6 +144,28 @@ const getProfile = async (req, res, next) => {
     }
 }
 
+const getStudentOfClass = async (req, res, next) => {
+    try {
+        const classId = req.params.classId;
+        const listStudent = await accountService.findStudentOfClass(classId);
+        sendSuccess(res, "Get list student of class successfully", listStudent);
+    } catch (error) {
+        sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
+    }
+}
+
+const getTeacherOfClass = async (req, res, next) => {
+    try {
+        const classId = req.params.classId;
+        const listTeacher = await accountService.findTeacherOfClass(classId);
+        sendSuccess(res, "Get list teacher of class successfully", listTeacher);
+    } catch (error) {
+        sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
+    }
+}
+
 
 
 export const accountController = {
@@ -156,5 +178,7 @@ export const accountController = {
     getStudentById,
     changePassword,
     editAccount,
-    getProfile
+    getProfile,
+    getStudentOfClass,
+    getTeacherOfClass
 }
