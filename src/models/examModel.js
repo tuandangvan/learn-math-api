@@ -51,10 +51,14 @@ const examSchema = Schema(
             type: Number,
             default: 0,
         },
+        quantity: {
+            type: Number,
+            default: 0
+        },
         numberOfAttempts: {
             type: Number,
             required: true,
-            default: 0
+            default: 1
         },
         questions: [
             {
