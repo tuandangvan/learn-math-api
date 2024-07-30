@@ -77,6 +77,9 @@ const pushAnswer = async (req, res, next) => {
         if (!test) {
             throw new Error('Test not found');
         }
+        if (test.status === "FINISHED") {
+            throw new Error('Test has completed');
+        }
         const exam = await examService.findExamById(examId);
         if (!exam) {
             throw new Error('Exam not found');
@@ -111,10 +114,31 @@ const pushAnswer = async (req, res, next) => {
                 }
             }
         }
-        const result = await testService.pushAnswer(testId, test);
         if (finish) {
-
+            test.endTime = date;
+            test.status = "FINISHED";
+            test.total = 0;
+            test.correct = 0;
+            test.point = 0;
+            for (var i = 0; i < test.answers.length; i++) {
+                if (test.answers[i].typeQ === "CHOICE") {
+                    test.total += 1;
+                    if (test.answers[i].result[0].correct) {
+                        test.point += test.answers[i].result[0].point;
+                        test.correct += 1;
+                    }
+                } else {
+                    for (var j = 0; j < exam.questions[i].answers.length; j++) {
+                        test.total += 1;
+                        if (test.answers[i].result[j].correct) {
+                            test.point += test.answers[i].result[j].point;
+                            test.correct += 1;
+                        }
+                    }
+                }
+            }
         }
+        const result = await testService.pushAnswer(testId, test);
         sendSuccess(res, "Push answer success", result);
     } catch (error) {
         sendError(res, error.message, error.stack, 404);

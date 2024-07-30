@@ -79,6 +79,18 @@ const findExamById = async function (examId) {
 //     return updateAttempts;
 // }
 
+const getExamByExamId = async function (examId) {
+    const exams = await Exam.aggregate([
+        { $match: { _id: examId, active: true, deleted: false } },
+        { $unwind: "$scores" },
+        { $sort: { "scores.value": -1 } },
+        { $group: { _id: "$_id", highestScores: { $push: "$scores" } } },
+        { $project: { _id: 0, highestScores: { $slice: ["$highestScores", 1] } } } // Get the top score
+    ]);
+
+    return exams;
+}
+
 
 
 export const examService = {
