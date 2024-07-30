@@ -11,6 +11,7 @@ router.post('/register/student', accountController.createAccount);
 router.post('/sign-in', accountController.signIn);
 router.post('/refresh-token', accountController.refreshToken);
 router.get('/list-teacher', accountController.getListTeacher);
+router.get('/list-student', accountController.getListStudent);
 router.put('/password', authencation, accountController.changePassword);
 router.put('/profile', authencation, accountController.editAccount);
 router.get('/profile/account', authencation, accountController.getProfile);

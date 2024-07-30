@@ -51,8 +51,13 @@ const findAccountByRefreshToken = async function (refreshToken) {
 }
 
 const findListTeacher = async function () {
-    const listTeacher = await Account.find({ role: Role.TEACHER }, "id firstName lastName email phone avatar sex introduction");
+    const listTeacher = await Account.find({ role: Role.TEACHER }, "id firstName lastName address email phone avatar sex introduction");
     return listTeacher;
+}
+
+const findListStudent = async function () {
+    const listStudent = await Account.find({ role: Role.TEACHER }, "id firstName lastName address email phone avatar sex introduction");
+    return listStudent;
 }
 
 const findAccountByRole = async function (role, id) {
@@ -82,6 +87,7 @@ export const accountService = {
     findByIdAndUpdate,
     findAccountByRefreshToken,
     findListTeacher,
+    findListStudent,
     findAccountByRole,
     findAccountById,
     updateAccount

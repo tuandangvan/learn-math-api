@@ -66,6 +66,16 @@ const getListTeacher = async (req, res, next) => {
     }
 }
 
+const getListStudent = async (req, res, next) => {
+    try {
+        const listStudent = await accountService.findListStudent();
+        sendSuccess(res, "Get list student successfully", listStudent);
+    } catch (error) {
+        sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
+    }
+}
+
 const getTeacherById = async (req, res, next) => {
     try {
         const accountId = req.params.id;
@@ -141,6 +151,7 @@ export const accountController = {
     signIn,
     refreshToken,
     getListTeacher,
+    getListStudent,
     getTeacherById,
     getStudentById,
     changePassword,
