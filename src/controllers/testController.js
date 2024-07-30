@@ -146,6 +146,17 @@ const pushAnswer = async (req, res, next) => {
     }
 }
 
+const getTestByIdPending = async (req, res, next) => {
+    try {
+        const testId = req.params.testId;
+        const test = await testService.getTestByIdPending(testId);
+        sendSuccess(res, "Get test success", test);
+    } catch (error) {
+        sendError(res, error.message, error.stack, 404);
+        next();
+    }
+}
+
 
 // const takeExam = async (req, res, next) => {
 //     try {
@@ -228,6 +239,7 @@ export const testController = {
     pushAnswer,
     // takeExam,
     getTestsExam,
-    getTestById
+    getTestById,
+    getTestByIdPending
 
 }
