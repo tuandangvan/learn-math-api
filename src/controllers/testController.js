@@ -11,6 +11,13 @@ const createTest = async (req, res, next) => {
         const createBy = token.id;
         const _test = req.body;
         const exam = await examService.findExamById(examId);
+        const tests = await testService.getTestAttempt(examId, createBy);
+        if (tests.length >= exam.numberOfAttempts) {
+            throw new Error('You have reached the maximum number of attempts');
+        }
+        _test.type = exam.type;
+        _test.classId = exam.classId;
+        _test.name = exam.name;
         if (!exam) {
             throw new Error('Exam not found');
         }
@@ -146,6 +153,17 @@ const pushAnswer = async (req, res, next) => {
     }
 }
 
+const getTestByIdPending = async (req, res, next) => {
+    try {
+        const testId = req.params.testId;
+        const test = await testService.getTestByIdPending(testId);
+        sendSuccess(res, "Get test success", test);
+    } catch (error) {
+        sendError(res, error.message, error.stack, 404);
+        next();
+    }
+}
+
 
 // const takeExam = async (req, res, next) => {
 //     try {
@@ -228,6 +246,7 @@ export const testController = {
     pushAnswer,
     // takeExam,
     getTestsExam,
-    getTestById
+    getTestById,
+    getTestByIdPending
 
 }
