@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-import Class from '../models/classModel.js';;
+import Class from '../models/classModel.js'; import Account from '../models/accountModel.js';
+;
 
 
 //admin
@@ -57,6 +58,14 @@ const addTeacher = async function (classId, teacherId) {
             }
         }
     );
+
+    await Account.updateOne(
+        { _id: teacherId },
+        {
+            $set: {
+                classId: classId
+            }
+        });
     return addTeacher;
 }
 
@@ -69,6 +78,13 @@ const removeTeacher = async function (classId, teacherId) {
             }
         }
     );
+    await Account.updateOne(
+        { _id: teacherId },
+        {
+            $set: {
+                classId: null
+            }
+        });
     return removeTeacher;
 }
 
@@ -122,6 +138,13 @@ const addStudent = async function (classId, studentId) {
             }
         }
     );
+    await Account.updateOne(
+        { _id: studentId },
+        {
+            $set: {
+                classId: classId
+            }
+        });
     return addStudent;
 }
 
@@ -134,6 +157,13 @@ const removeStudent = async function (classId, studentId) {
             }
         }
     );
+    await Account.updateOne(
+        { _id: studentId },
+        {
+            $set: {
+                classId: null
+            }
+        });
     return removeStudent;
 }
 

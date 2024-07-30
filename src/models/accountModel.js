@@ -53,7 +53,9 @@ const accountSchema = Schema(
             trim: true
         },
         classId: {
-            type: String,
+            type: Schema.Types.ObjectId,
+            ref: "Class",
+            default: null
         },
         introduction: {
             type: String,

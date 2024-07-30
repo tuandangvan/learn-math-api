@@ -15,6 +15,8 @@ router.get('/list-student', accountController.getListStudent);
 router.put('/password', authencation, accountController.changePassword);
 router.put('/profile', authencation, accountController.editAccount);
 router.get('/profile/account', authencation, accountController.getProfile);
+router.get('/list/student/:classId', authencation, permission([Role.ADMIN, Role.TEACHER]), accountController.getStudentOfClass);
+router.get('/list/teacher/:classId', authencation, permission(Role.ADMIN), accountController.getTeacherOfClass);
 
 //admin
 router.post('/create/teacher', authencation, permission(Role.ADMIN), accountController.createAccount);

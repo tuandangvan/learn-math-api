@@ -77,6 +77,15 @@ const updateAccount = async function (accountId, data) {
     const accountUpdate = await Account.updateOne({ _id: accountId }, { $set: { ...data } });
     return accountUpdate;
 }
+const findStudentOfClass = async function (classId) {
+    const listStudent = await Account.find({ classId: classId, role: Role.STUDENT });
+    return listStudent;
+}
+
+const findTeacherOfClass = async function (classId) {
+    const teacher = await Account.findOne({ classId: classId, role: Role.TEACHER });
+    return teacher;
+}
 
 
 
@@ -90,5 +99,7 @@ export const accountService = {
     findListStudent,
     findAccountByRole,
     findAccountById,
-    updateAccount
+    updateAccount,
+    findStudentOfClass,
+    findTeacherOfClass
 }
