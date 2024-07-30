@@ -70,11 +70,12 @@ const getExamById = async (req, res, next) => {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 5;
         const exam = await examService.getExamById(examId, page, limit);
-        sendSuccess(res, "Get exam successfully", {
-            exame: exam.exam,
+        const resultExam = {
+            ...exam.exam.toObject(),
             page: page,
             totalPage: Math.ceil(exam.count / limit)
-        });
+        };
+        sendSuccess(res, "Get exam successfully", resultExam);
     } catch (error) {
         sendError(res, error.message, error.stack, 400);
         next();
