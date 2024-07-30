@@ -4,6 +4,7 @@ import { classService } from "../services/classService";
 import { examService } from "../services/examService";
 import { sendError, sendSuccess } from "../utils/Api";
 import getTokenHeader from "../utils/token";
+import { testService } from "../services/testService";
 
 const createExam = async (req, res, next) => {
     try {
@@ -53,7 +54,9 @@ const getListExam = async (req, res, next) => {
     try {
         const type = req.query.type;
         const classId = req.query.classId || null;
+        const acc = getTokenHeader(res, req, next);
         const exams = await examService.getListExam(type, classId);
+        // const testAttempt = await testService.getTestAttempt(exams);
         sendSuccess(res, "Get list exam successfully", exams);
     } catch (error) {
         sendError(res, error.message, error.stack, 400);

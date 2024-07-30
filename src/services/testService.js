@@ -44,11 +44,17 @@ const getTestAttempt = async function (examId, createBy) {
     return test;
 }
 
+const getTestPendingByCreateBy = async function (examId, createBy) {
+    const test = await Test.findOne({ examId: examId, createBy: createBy, status: 'PENDING' });
+    return test;
+}
+
 export const testService = {
     createTest,
     getTestsExam,
     getTestById,
     pushAnswer,
     getTestByIdPending,
-    getTestAttempt
+    getTestAttempt,
+    getTestPendingByCreateBy
 }

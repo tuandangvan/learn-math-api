@@ -10,17 +10,28 @@ const createTest = async (req, res, next) => {
         const token = getTokenHeader(res, req, next);
         const createBy = token.id;
         const _test = req.body;
+        
+        //kiem tra exam co ton tai khong
         const exam = await examService.findExamById(examId);
+        if (!exam) {
+            throw new Error('Exam not found');
+        }
+
+        //kiem tra so lan lam bai thi
         const tests = await testService.getTestAttempt(examId, createBy);
         if (tests.length >= exam.numberOfAttempts) {
             throw new Error('You have reached the maximum number of attempts');
         }
+
+        //kiem tra co dang trong trang thai lam bai thi khong
+        const testPending = await testService.getTestPendingByCreateBy(examId, createBy);
+        if (testPending) {
+            throw new Error('You have a test pending');
+        }
+
         _test.type = exam.type;
         _test.classId = exam.classId;
         _test.name = exam.name;
-        if (!exam) {
-            throw new Error('Exam not found');
-        }
         _test.point = 0;
         _test.correct = 0;
         _test.total = 0;
@@ -67,7 +78,7 @@ const createTest = async (req, res, next) => {
         const result = await testService.createTest(_test);
         sendSuccess(res, "Create test success", result);
     } catch (error) {
-        sendError(res, error.message, error.stack, 404);
+        sendError(res, error.message, error.stack, 207);
         next();
     }
 }
