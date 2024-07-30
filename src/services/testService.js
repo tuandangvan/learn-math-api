@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import Test from '../models/testModel';
 
 const createTest = async function (data) {
-    console.log(data.answers);
     const newTest = new Test({
         _id: new mongoose.Types.ObjectId(),
         ...data
@@ -40,10 +39,16 @@ const getTestByIdPending = async function (testId) {
     return test;
 }
 
+const getTestAttempt = async function (examId, createBy) {
+    const test = await Test.find({ examId: examId, createBy: createBy });
+    return test;
+}
+
 export const testService = {
     createTest,
     getTestsExam,
     getTestById,
     pushAnswer,
-    getTestByIdPending
+    getTestByIdPending,
+    getTestAttempt
 }
