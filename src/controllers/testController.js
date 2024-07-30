@@ -1,3 +1,4 @@
+import { accountService } from "../services/accountService";
 import { examService } from "../services/examService";
 import { testService } from "../services/testService";
 import { sendError, sendSuccess } from "../utils/Api";
@@ -10,11 +11,24 @@ const createTest = async (req, res, next) => {
         const token = getTokenHeader(res, req, next);
         const createBy = token.id;
         const _test = req.body;
-        
+
         //kiem tra exam co ton tai khong
         const exam = await examService.findExamById(examId);
         if (!exam) {
             throw new Error('Exam not found');
+        }
+
+        //kiem tra account co nam trong lop khong
+        const account = await accountService.findAccountById(createBy);
+        if (account.classId.toString() != exam.classId.toString()) {
+            throw new Error('You are not in this class');
+        }
+
+        //kiem tra exam co dang mo khong
+        const date = new Date();
+        date.setHours(date.getHours() + 7);
+        if (exam.startTime > date || exam.endTime < date) {
+            throw new Error('Exam is not open yet');
         }
 
         //kiem tra so lan lam bai thi
@@ -37,9 +51,6 @@ const createTest = async (req, res, next) => {
         _test.total = 0;
         _test.createBy = createBy;
         _test.examId = examId;
-        //chuyển sang giờ viet nam
-        const date = new Date();
-        date.setHours(date.getHours() + 7);
         _test.startTime = date;
         _test.endTime = null;
         _test.answers = [];

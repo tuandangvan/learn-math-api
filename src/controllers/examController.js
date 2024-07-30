@@ -5,6 +5,7 @@ import { examService } from "../services/examService";
 import { sendError, sendSuccess } from "../utils/Api";
 import getTokenHeader from "../utils/token";
 import { testService } from "../services/testService";
+import { accountService } from "../services/accountService";
 
 const createExam = async (req, res, next) => {
     try {
@@ -53,11 +54,40 @@ const deleteExam = async (req, res, next) => {
 const getListExam = async (req, res, next) => {
     try {
         const type = req.query.type;
-        const classId = req.query.classId || null;
         const acc = getTokenHeader(res, req, next);
+        const classId = await accountService.findClassByAccountId(acc.id);
         const exams = await examService.getListExam(type, classId);
         // const testAttempt = await testService.getTestAttempt(exams);
-        sendSuccess(res, "Get list exam successfully", exams);
+
+        const result = [];
+
+
+        for (let i = 0; i < exams.length; i++) {
+            var statusTest = 'NONE';//NONE la chua lam lan nao
+
+            //lay danh sach bai da thuc hien
+            const testAttempt = await testService.getTestAttempt(exams[i]._id, acc.id);
+            if (testAttempt.length == exams[i].numberOfAttempts) {
+                statusTest = 'END';
+            }
+
+            for (let j = 0; j < testAttempt.length; j++) {
+                testAttempt[j].answers = undefined;
+                if (testAttempt[j].status === 'PENDING') {
+                    statusTest = 'PENDING';
+                }
+            }
+
+            result.push({
+                ...exams[i].toObject(),
+                statusTest: statusTest,
+                listTest: testAttempt
+            });
+
+
+        }
+
+        sendSuccess(res, "Get list exam successfully", result);
     } catch (error) {
         sendError(res, error.message, error.stack, 400);
         next();
