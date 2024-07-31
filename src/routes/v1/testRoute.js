@@ -13,6 +13,7 @@ router.put("/:examId", authencation, permission(Role.STUDENT), testController.pu
 router.get("/:examId", authencation, permission(Role.STUDENT), testController.getTestsExam);
 router.get("/:testId/detail", authencation, permission(Role.STUDENT), testController.getTestById);
 router.get("/:testId/pending", authencation, permission(Role.STUDENT), testController.getTestByIdPending);
+router.get("/completed/:testId", authencation, permission(Role.STUDENT), testController.getTestCompletedById);
 
 
 export const testRouter = router;

@@ -263,12 +263,24 @@ const getTestById = async (req, res, next) => {
     }
 }
 
+const getTestCompletedById = async (req, res, next) => {
+    try {
+        const testId = req.params.testId;
+        const test = await testService.getTestCompletedById(testId);
+        sendSuccess(res, "Get test success", test);
+    } catch (error) {
+        sendError(res, error.message, error.stack, 404);
+        next();
+    }
+}
+
 export const testController = {
     createTest,
     pushAnswer,
     // takeExam,
     getTestsExam,
     getTestById,
-    getTestByIdPending
+    getTestByIdPending,
+    getTestCompletedById
 
 }

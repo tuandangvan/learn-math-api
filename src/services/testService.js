@@ -50,6 +50,17 @@ const getTestPendingByCreateBy = async function (examId, createBy) {
     return test;
 }
 
+const getTestCompletedById = async function (testId) {
+    const test = await Test.findOne({ _id: testId })
+        .populate('examId', 'id name')
+        .populate('createBy', 'id firstName lastName avatar')
+        .populate('classId', 'id name image description');
+    if (test.status == 'PENDING') {
+        throw new Error('Test not finished');
+    }
+    return test;
+}
+
 export const testService = {
     createTest,
     getTestsExam,
@@ -57,5 +68,6 @@ export const testService = {
     pushAnswer,
     getTestByIdPending,
     getTestAttempt,
-    getTestPendingByCreateBy
+    getTestPendingByCreateBy,
+    getTestCompletedById
 }
