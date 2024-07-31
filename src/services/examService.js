@@ -42,7 +42,7 @@ const getListExam = async function (type, classId) {
 const getExamById = async function (examId, page, limit) {
     //phân trang trong phần question
     const exam = await Exam.findOne({ _id: examId, active: true, deleted: false },
-        { deleted: 0, questions: { $slice: [(page - 1) * 5, limit] } });
+        { deleted: 0, questions: { $slice: [(page - 1) * limit, limit] } });
     if (!exam) {
         throw new Error('Exam not found');
     }
