@@ -168,6 +168,7 @@ const pushAnswer = async (req, res, next) => {
             }
         }
         const result = await testService.pushAnswer(testId, test);
+        await examService.updateQuantity(examId);
         sendSuccess(res, "Push answer success", result);
     } catch (error) {
         sendError(res, error.message, error.stack, 404);
