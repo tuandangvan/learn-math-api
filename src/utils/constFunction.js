@@ -2,11 +2,19 @@ const schedule = require('node-schedule');
 import { testService } from '../services/testService';
 
 const finishTest = async function (testId, exam, dateStart, duration) {
+    var dateStartGet = new Date(dateStart);
+    const dateStartGet2 = new Date(dateStart);
+    var durationGet = duration;
+    var dateExamEnd = new Date(exam.endTime);
     const specificTime = dateStart;
-    //cong them 7 giờ
     specificTime.setHours(specificTime.getHours() - 7);
+    dateStartGet.setMinutes(dateStart.getMinutes() + durationGet);
+    if (dateStartGet > exam.endTime) {
+        durationGet = (dateExamEnd - dateStartGet2) / (60000);
+    }
+    console.log("Duration: " + durationGet);
 
-    const timeAfter40Minutes = new Date(specificTime.getTime() + duration * 60000);
+    const timeAfter40Minutes = new Date(specificTime.getTime() + durationGet * 60000);
 
     const job = schedule.scheduleJob(timeAfter40Minutes, async function () {
         try {

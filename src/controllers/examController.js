@@ -56,14 +56,11 @@ const getListExam = async (req, res, next) => {
         const type = req.query.type;
         const acc = getTokenHeader(res, req, next);
         const classId = await accountService.findClassByAccountId(acc.id);
-        const exams = await examService.getListExam(type, classId);
-
+        const exams = await examService.getListExam2(type, classId);
         const result = [];
-
         const date = new Date();
         date.setHours(date.getHours() + 7);
-
-
+        
         for (let i = 0; i < exams.length; i++) {
             var statusTest = 'NONE';//NONE la chua lam lan nao
 
@@ -74,10 +71,42 @@ const getListExam = async (req, res, next) => {
             }
 
             for (let j = 0; j < testAttempt.length; j++) {
-                testAttempt[j].answers = undefined;
-                const dateEnd = new Date(exams[i].startTime);
-                dateEnd.setMinutes(dateEnd.getMinutes() + exams[i].time);
-                if (testAttempt[j].status === 'PENDING' && date < dateEnd) {
+                const dateEnd = new Date(exams[i].endTime);
+                const dateEnd2 = new Date(testAttempt[j].startTime);
+                dateEnd2.setMinutes(dateEnd.getMinutes() + exams[i].time);
+                if (testAttempt[j].status === 'PENDING' && (date > dateEnd || date > dateEnd2)) {
+                    const test = await testService.getTestById(testAttempt[j]._id);
+                    if (date > dateEnd) {
+                        test.endTime = exams[i].endTime;
+                    } else {
+                        test.endTime = dateEnd2;
+                    }
+                    test.status = "FINISHED";
+                    test.total = 0;
+                    test.correct = 0;
+                    test.point = 0;
+                    for (var k = 0; k < test.answers.length; k++) {
+                        if (test.answers[k].typeQ === "CHOICE") {
+                            test.total += 1;
+                            if (test.answers[k].result[0].correct) {
+                                test.point += test.answers[k].result[0].point;
+                                test.correct += 1;
+                            }
+                        } else {
+                            for (var l = 0; l < exams[i].questions[k].answers.length; l++) {
+                                test.total += 1;
+                                if (test.answers[k].result[l].correct) {
+                                    test.point += test.answers[k].result[l].point;
+                                    test.correct += 1;
+                                }
+                            }
+                        }
+                    }
+                    await testService.finishTestTimeout(test);
+                    test.answers = undefined;
+                    testAttempt[j] = test;
+                } else if (testAttempt[j].status === 'PENDING' && (date < dateEnd && date < dateEnd2)) {
+                    testAttempt[j].answers = undefined;
                     statusTest = 'PENDING';
                 }
             }
