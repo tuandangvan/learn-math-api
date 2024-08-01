@@ -90,6 +90,14 @@ const getExamByExamId = async function (examId) {
 
     return exams;
 }
+const updateQuantity = async function (examId) {
+    const exam = await Exam.findById(examId);
+    if (!exam) {
+        throw new Error('Exam not found');
+    }
+    const updateQuantity = await Exam.updateOne({ _id: examId }, { $inc: { quantity: 1 } });
+    return updateQuantity;
+}
 
 
 
@@ -100,5 +108,6 @@ export const examService = {
     getListExam,
     getExamById,
     findExamById,
-    // updateAttempts
+    // updateAttempts,
+    updateQuantity
 }

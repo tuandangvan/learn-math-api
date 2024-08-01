@@ -37,7 +37,21 @@ const getTestByIdPending = async function (testId) {
     if (test.status == 'FINISHED') {
         throw new Error('Test finished');
     }
-    return test;
+    const testNew = {
+        ...test.toObject(),
+        answers: test.answers.map(answer => {
+            return {
+                sentenceNumber: answer.sentenceNumber,
+                typeQ: answer.typeQ,
+                result: answer.result.map(res => {
+                    return {
+                        answer: res.answer == "none" ? null : res.answer
+                    };
+                })
+            }
+        })
+    }
+    return testNew;
 }
 
 const getTestAttempt = async function (examId, createBy) {
@@ -58,7 +72,24 @@ const getTestCompletedById = async function (testId) {
     if (test.status == 'PENDING') {
         throw new Error('Test not finished');
     }
-    return test;
+
+    const updatedAnswers = {
+        ...test.toObject(),
+        answers: test.answers.map(answer => {
+            return {
+                sentenceNumber: answer.sentenceNumber,
+                typeQ: answer.typeQ,
+                result: answer.result.map(res => {
+                    return {
+                        answer: res.answer == "none" ? null : res.answer,
+                        correct: res.correct,
+                        point: res.point
+                    };
+                })
+            };
+        })
+    };
+    return updatedAnswers;
 }
 
 export const testService = {
