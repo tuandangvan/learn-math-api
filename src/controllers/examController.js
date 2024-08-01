@@ -57,9 +57,11 @@ const getListExam = async (req, res, next) => {
         const acc = getTokenHeader(res, req, next);
         const classId = await accountService.findClassByAccountId(acc.id);
         const exams = await examService.getListExam(type, classId);
-        // const testAttempt = await testService.getTestAttempt(exams);
 
         const result = [];
+
+        const date = new Date();
+        date.setHours(date.getHours() + 7);
 
 
         for (let i = 0; i < exams.length; i++) {
@@ -73,7 +75,9 @@ const getListExam = async (req, res, next) => {
 
             for (let j = 0; j < testAttempt.length; j++) {
                 testAttempt[j].answers = undefined;
-                if (testAttempt[j].status === 'PENDING') {
+                const dateEnd = new Date(exams[i].startTime);
+                dateEnd.setMinutes(dateEnd.getMinutes() + exams[i].time);
+                if (testAttempt[j].status === 'PENDING' && date < dateEnd) {
                     statusTest = 'PENDING';
                 }
             }

@@ -2,6 +2,7 @@ import { accountService } from "../services/accountService";
 import { examService } from "../services/examService";
 import { testService } from "../services/testService";
 import { sendError, sendSuccess } from "../utils/Api";
+import { constFunction } from "../utils/constFunction";
 import getTokenHeader from "../utils/token";
 
 
@@ -87,6 +88,7 @@ const createTest = async (req, res, next) => {
             }
         }
         const result = await testService.createTest(_test);
+        await constFunction.finishTest(result._id, exam, date, exam.time);
         sendSuccess(res, "Create test success", result);
     } catch (error) {
         sendError(res, error.message, error.stack, 207);
@@ -120,22 +122,21 @@ const pushAnswer = async (req, res, next) => {
         }
 
         for (var i = from - 1; i < to; i++) {
-            test.answers[i].result[0].answer = _test[i - from + 1].result[0].answer;
             if (exam.questions[i].typeQ === "CHOICE") {
+                test.answers[i].result[0].answer = _test[i - from + 1].result[0].answer;
                 if (_test[i - from + 1].result[0].answer == exam.questions[i].answers[0].correct) {
                     test.answers[i].result[0].correct = true;
                     test.answers[i].result[0].point = exam.questions[i].answers[0].point;
-                    test.point += exam.questions[i].answers[0].point;
                 } else {
                     test.answers[i].result[0].correct = false;
                     test.answers[i].result[0].point = 0;
                 }
             } else {
                 for (var j = 0; j < exam.questions[i].answers.length; j++) {
+                    test.answers[i].result[j].answer = _test[i - from + 1].result[j].answer;
                     if (_test[i - from + 1].result[j].answer == exam.questions[i].answers[j].correct) {
                         test.answers[i].result[j].correct = true;
                         test.answers[i].result[j].point = exam.questions[i].answers[j].point;
-                        test.point += exam.questions[i].answers[j].point;
                     } else {
                         test.answers[i].result[j].correct = false;
                         test.answers[i].result[j].point = 0;
