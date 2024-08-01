@@ -92,6 +92,21 @@ const getTestCompletedById = async function (testId) {
     return updatedAnswers;
 }
 
+const finishTestTimeout = async function (test) {
+    const testResult = await Test.updateOne({ _id: test._id },
+        {
+            $set:
+            {
+                endTime: test.endTime,
+                status: 'FINISHED',
+                point: test.point,
+                correct: test.correct,
+                total: test.total
+            }
+        });
+    return testResult;
+}
+
 export const testService = {
     createTest,
     getTestsExam,
@@ -100,5 +115,6 @@ export const testService = {
     getTestByIdPending,
     getTestAttempt,
     getTestPendingByCreateBy,
-    getTestCompletedById
+    getTestCompletedById,
+    finishTestTimeout
 }

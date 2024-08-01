@@ -39,6 +39,16 @@ const getListExam = async function (type, classId) {
     }
 }
 
+const getListExam2 = async function (type, classId) {
+    if (classId && type == 'LESSON') {
+        const exams = await Exam.find({ type: type, classId: classId, active: true, deleted: false }, { deleted: 0 });
+        return exams;
+    } else {
+        const exams = await Exam.find({ type: type, active: true, deleted: false }, { deleted: 0 });
+        return exams;
+    }
+}
+
 const getExamById = async function (examId, page, limit) {
     //phân trang trong phần question
     const exam = await Exam.findOne({ _id: examId, active: true, deleted: false },
@@ -106,6 +116,7 @@ export const examService = {
     editExam,
     deleteExam,
     getListExam,
+    getListExam2,
     getExamById,
     findExamById,
     // updateAttempts,
