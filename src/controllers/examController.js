@@ -53,14 +53,17 @@ const deleteExam = async (req, res, next) => {
 
 const getListExam = async (req, res, next) => {
     try {
+
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 5;
         const type = req.query.type;
         const acc = getTokenHeader(res, req, next);
         const classId = await accountService.findClassByAccountId(acc.id);
-        const exams = await examService.getListExam2(type, classId);
+        const { exams, count } = await examService.getListExam2(type, classId, page, limit);
         const result = [];
         const date = new Date();
         date.setHours(date.getHours() + 7);
-        
+
         for (let i = 0; i < exams.length; i++) {
             var statusTest = 'NONE';//NONE la chua lam lan nao
 
@@ -116,11 +119,13 @@ const getListExam = async (req, res, next) => {
                 statusTest: statusTest,
                 listTest: testAttempt
             });
-
-
         }
 
-        sendSuccess(res, "Get list exam successfully", result);
+        sendSuccess(res, "Get list exam successfully", {
+            listExams: result,
+            page: page,
+            totalPage: Math.ceil(count / limit)
+        });
     } catch (error) {
         sendError(res, error.message, error.stack, 400);
         next();

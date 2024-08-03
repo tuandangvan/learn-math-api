@@ -39,14 +39,12 @@ const getListExam = async function (type, classId) {
     }
 }
 
-const getListExam2 = async function (type, classId) {
-    if (classId && type == 'LESSON') {
-        const exams = await Exam.find({ type: type, classId: classId, active: true, deleted: false }, { deleted: 0 });
-        return exams;
-    } else {
-        const exams = await Exam.find({ type: type, active: true, deleted: false }, { deleted: 0 });
-        return exams;
-    }
+const getListExam2 = async function (type, classId, page, limit) {
+    const exams = await Exam.find({ type: type, classId: classId, active: true, deleted: false }, { questions: 0, deleted: 0 })
+        .skip((page - 1) * limit).limit(limit);
+
+    const count = await Exam.countDocuments({ type: type, classId: classId, active: true, deleted: false });
+    return { exams, count };
 }
 
 const getExamById = async function (examId, page, limit) {
@@ -89,17 +87,17 @@ const findExamById = async function (examId) {
 //     return updateAttempts;
 // }
 
-const getExamByExamId = async function (examId) {
-    const exams = await Exam.aggregate([
-        { $match: { _id: examId, active: true, deleted: false } },
-        { $unwind: "$scores" },
-        { $sort: { "scores.value": -1 } },
-        { $group: { _id: "$_id", highestScores: { $push: "$scores" } } },
-        { $project: { _id: 0, highestScores: { $slice: ["$highestScores", 1] } } } // Get the top score
-    ]);
+// const getExamByExamId = async function (examId) {
+//     const exams = await Exam.aggregate([
+//         { $match: { _id: examId, active: true, deleted: false } },
+//         { $unwind: "$scores" },
+//         { $sort: { "scores.value": -1 } },
+//         { $group: { _id: "$_id", highestScores: { $push: "$scores" } } },
+//         { $project: { _id: 0, highestScores: { $slice: ["$highestScores", 1] } } } // Get the top score
+//     ]);
 
-    return exams;
-}
+//     return exams;
+// }
 const updateQuantity = async function (examId) {
     const exam = await Exam.findById(examId);
     if (!exam) {
