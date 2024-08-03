@@ -3,6 +3,7 @@ import { sendError, sendSuccess } from "../utils/Api";
 import { classService } from "../services/classService";
 import { accountService } from "../services/accountService";
 import Role from "../utils/enums";
+import getTokenHeader from "../utils/token";
 
 //admin
 const createClass = async (req, res, next) => {
@@ -177,6 +178,17 @@ const getBook_Chapter_Lesson = async (req, res, next) => {
     }
 }
 
+const getClassByAccountId = async (req, res, next) => {
+    try {
+        const acc = getTokenHeader(res, req, next);
+        const _class = await accountService.getClassByAccountId(acc.id);
+        sendSuccess(res, "Get class successfully", _class);
+    } catch (error) {
+        sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
+    }
+}
+
 
 export const classController = {
     //genaral
@@ -196,6 +208,7 @@ export const classController = {
 
     //student
     addStudent,
-    removeStudent
+    removeStudent,
+    getClassByAccountId
 
 }
