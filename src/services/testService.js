@@ -55,7 +55,7 @@ const getTestByIdPending = async function (testId) {
 }
 
 const getTestAttempt = async function (examId, createBy) {
-    const test = await Test.find({ examId: examId, createBy: createBy });
+    const test = await Test.find({ examId: examId, createBy: createBy }, { answers: 0 });
     return test;
 }
 
