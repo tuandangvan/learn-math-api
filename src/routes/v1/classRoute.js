@@ -29,6 +29,7 @@ router.put('/:classId/book/:bookId', authencation, permission([Role.TEACHER, Rol
 //student
 router.put('/:classId/student/in', authencation, permission([Role.STUDENT, Role.TEACHER, Role.ADMIN]), classController.addStudent);
 router.put('/:classId/student/out', authencation, permission([Role.STUDENT, Role.TEACHER, Role.ADMIN]), classController.removeStudent);
+router.get('/my-class', authencation, permission(Role.STUDENT), classController.getClassByAccountId);
 
 
 export const classRouter = router;
