@@ -33,7 +33,7 @@ const createClass = async (req, res, next) => {
             description: "Mô tả"
         },
         ];
-        const classId = newClass.classId;
+        const classId = newClass._id;
         for (let i = 0; i < _book.length; i++) {
             await classService.createBook(classId, _book[i]);
         }
