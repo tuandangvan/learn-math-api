@@ -10,6 +10,33 @@ const createClass = async (req, res, next) => {
     try {
         const _class = req.body;
         const newClass = await classService.createClass(_class);
+
+        //add book
+        const _book = [{
+            type: "TEXTBOOK",
+            name: "Sách giáo khoa",
+            description: "Mô tả"
+        },
+        {
+            type: "THINKING",
+            name: "Sách tư duy",
+            description: "Mô tả"
+        },
+        {
+            type: "ADVANCED",
+            name: "Sách nâng cao",
+            description: "Mô tả"
+        },
+        {
+            type: "FMO",
+            name: "Toán học quốc tế FMO",
+            description: "Mô tả"
+        },
+        ];
+        const classId = newClass.classId;
+        for (let i = 0; i < _book.length; i++) {
+            await classService.createBook(classId, _book[i]);
+        }
         sendSuccess(res, "Create class successfully", null);
     } catch (error) {
         sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);

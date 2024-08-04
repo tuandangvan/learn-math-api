@@ -52,11 +52,11 @@ const accountSchema = Schema(
             required: true,
             trim: true
         },
-        classId: {
+        classId: [{
             type: Schema.Types.ObjectId,
             ref: "Class",
             default: null
-        },
+        }],
         introduction: {
             type: String,
             default: ""

@@ -21,7 +21,7 @@ router.put('/:classId', authencation, permission(Role.ADMIN), classController.ed
 //teacher
 router.put('/:classId/teacher/in', authencation, permission([Role.TEACHER, Role.ADMIN]), classController.addTeacher);
 router.put('/:classId/teacher/out', authencation, permission([Role.TEACHER, Role.ADMIN]), classController.removeTeacher);
-router.post('/:classId/book', authencation, permission([Role.TEACHER, Role.ADMIN]), classController.addBook);
+// router.post('/:classId/book', authencation, permission([Role.TEACHER, Role.ADMIN]), classController.addBook);
 router.put('/:classId/book/:bookId', authencation, permission([Role.TEACHER, Role.ADMIN]), classController.editBook);
 
 
