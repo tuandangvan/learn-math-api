@@ -105,6 +105,9 @@ const getClassByAccountId = async function (accountId) {
         model: 'Class',
         select: 'id name description image'
     });
+    if (account.role == Role.STUDENT) {
+        return account.classId[0];
+    }
     return account.classId;
 }
 
