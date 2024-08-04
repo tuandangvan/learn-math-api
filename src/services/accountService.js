@@ -102,8 +102,7 @@ const findClassByAccountId = async function (accountId) {
 const getClassByAccountId = async function (accountId) {
     const account = await Account.findOne({ _id: accountId }).populate({
         path: 'classId',
-        model: 'Class',
-        select: 'id name description image'
+        model: 'Class'
     });
     if (account.role == Role.STUDENT) {
         return account.classId[0];
