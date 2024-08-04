@@ -62,7 +62,7 @@ const addTeacher = async function (classId, teacherId) {
     await Account.updateOne(
         { _id: teacherId },
         {
-            $set: {
+            $push: {
                 classId: classId
             }
         });
@@ -81,7 +81,7 @@ const removeTeacher = async function (classId, teacherId) {
     await Account.updateOne(
         { _id: teacherId },
         {
-            $set: {
+            $pull: {
                 classId: null
             }
         });
@@ -141,7 +141,7 @@ const addStudent = async function (classId, studentId) {
     await Account.updateOne(
         { _id: studentId },
         {
-            $set: {
+            $push: {
                 classId: classId
             }
         });
@@ -160,7 +160,7 @@ const removeStudent = async function (classId, studentId) {
     await Account.updateOne(
         { _id: studentId },
         {
-            $set: {
+            $pull: {
                 classId: null
             }
         });

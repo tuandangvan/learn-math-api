@@ -62,6 +62,13 @@ const findListStudent = async function () {
 
 const findAccountByRole = async function (role, id) {
     const account = await Account.findOne({ role: role, _id: id });
+    if (!account) {
+        throw new Error("Account not found");
+    }
+    if (account.classId.length > 0 && role === Role.STUDENT) {
+        //moi hoc sinh chi tham gia 1 lop hoc
+        throw new Error("Each student is only allowed to attend 1 class");
+    }
     return account;
 }
 
@@ -93,7 +100,11 @@ const findClassByAccountId = async function (accountId) {
 }
 
 const getClassByAccountId = async function (accountId) {
-    const account = await Account.findOne({ _id: accountId }).populate('classId');
+    const account = await Account.findOne({ _id: accountId }).populate({
+        path: 'classId',
+        model: 'Class',
+        select: 'id name description image'
+    });
     return account.classId;
 }
 

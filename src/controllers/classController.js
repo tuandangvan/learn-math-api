@@ -132,17 +132,15 @@ const editBook = async (req, res, next) => {
 const addStudent = async (req, res, next) => {
     try {
         const classId = req.params.classId;
-        const studentId = req.body.studentId;
+        const acc = getTokenHeader(res, req, next);
+        const studentId = req.body.studentId || acc.id;
         const studentExist = await classService.studentExist(classId, studentId);
         if (studentExist) {
             sendError(res, "Student has been added", null, StatusCodes.NOT_ACCEPTABLE);
             return;
         }
-        const student = await accountService.findAccountByRole(Role.STUDENT, studentId);
-        if (!student) {
-            sendError(res, "Student not found", null, StatusCodes.NOT_FOUND);
-            return;
-        }
+        await accountService.findAccountByRole(Role.STUDENT, studentId);
+
         await classService.addStudent(classId, studentId);
         sendSuccess(res, "Add a student into class successfully", null);
     } catch (error) {
