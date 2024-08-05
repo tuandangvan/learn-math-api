@@ -20,6 +20,7 @@ router.get('/list/teacher/:classId', authencation, permission(Role.ADMIN), accou
 
 //admin
 router.post('/create/teacher', authencation, permission(Role.ADMIN), accountController.createAccount);
+router.get('/manage-account', authencation, permission(Role.ADMIN), accountController.findAccountForAdmin);
 
 
 export const accountRouter = router;
