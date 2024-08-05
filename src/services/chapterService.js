@@ -82,16 +82,28 @@ const addExamToLesson = async function (chapterId, lessonId, examId) {
 }
 
 const findListChapterByBook = async function (bookId) {
-    const chapters = await Chapter.find({ bookId: bookId, deleted: false }).select("name description");
+    const chapters = await Chapter.find({ bookId: bookId, deleted: false })
 
     const listChapter = chapters.map(chapter => {
         return {
             chapterId: chapter._id,
-            name: chapter.name,
-            description: chapter.description
+            ...chapter.toObject(),
+            _id: undefined,
         }
     })
     return listChapter;
+}
+
+const findChapterById = async function (chapterId) {
+    const chapter = await Chapter.findOne({ _id: chapterId, deleted: false });
+    if (!chapter) {
+        throw new Error("Chapter not found");
+    }
+    return {
+        chapterId: chapterId,
+        ...chapter.toObject(),
+        _id: undefined,
+    };
 }
 
 export const chapterService = {
@@ -101,5 +113,6 @@ export const chapterService = {
     findChapter,
     findBook,
     addExamToLesson,
-    findListChapterByBook
+    findListChapterByBook,
+    findChapterById
 }
