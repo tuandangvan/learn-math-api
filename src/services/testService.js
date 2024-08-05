@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import Test from '../models/testModel';
+import Exam from '../models/examModel';
 
 const createTest = async function (data) {
     const newTest = new Test({
@@ -73,19 +74,27 @@ const getTestCompletedById = async function (testId) {
         throw new Error('Test not finished');
     }
 
+    const exam = await Exam.findOne({ _id: test.examId });
+
     const updatedAnswers = {
         ...test.toObject(),
         answers: test.answers.map(answer => {
+            const question = exam.questions.find(q => q.sentenceNumber === answer.sentenceNumber);
             return {
                 sentenceNumber: answer.sentenceNumber,
                 typeQ: answer.typeQ,
+                question: question ? {
+                    content: question.content,
+                    image: question.image,
+                    answers: question.answers
+                } : null,
                 result: answer.result.map(res => {
                     return {
                         answer: res.answer == "none" ? null : res.answer,
                         correct: res.correct,
                         point: res.point
                     };
-                })
+                }),
             };
         })
     };
