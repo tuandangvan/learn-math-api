@@ -81,11 +81,25 @@ const addExamToLesson = async function (chapterId, lessonId, examId) {
     return addExam;
 }
 
+const findListChapterByBook = async function (bookId) {
+    const chapters = await Chapter.find({ bookId: bookId, deleted: false }).select("name description");
+
+    const listChapter = chapters.map(chapter => {
+        return {
+            chapterId: chapter._id,
+            name: chapter.name,
+            description: chapter.description
+        }
+    })
+    return listChapter;
+}
+
 export const chapterService = {
     createChapter,
     editChapter,
     deleteChapter,
     findChapter,
     findBook,
-    addExamToLesson
+    addExamToLesson,
+    findListChapterByBook
 }

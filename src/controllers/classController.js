@@ -213,6 +213,16 @@ const getClassByAccountId = async (req, res, next) => {
         next();
     }
 }
+const getListBook = async (req, res, next) => {
+    try {
+        const classId = req.params.classId;
+        const listBook = await classService.findListBook(classId);
+        sendSuccess(res, "Get list book successfully", listBook);
+    } catch (error) {
+        sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
+    }
+}
 
 
 export const classController = {
@@ -220,6 +230,7 @@ export const classController = {
     getListClass,
     getClass,
     getBook_Chapter_Lesson,
+    getListBook,
 
     //admin
     createClass,
