@@ -12,6 +12,7 @@ const router = express.Router();
 router.post("/", authencation, permission([Role.ADMIN, Role.TEACHER]), chapterController.createChapter);
 router.put("/:chapterId", authencation, permission([Role.ADMIN, Role.TEACHER]), chapterController.editChapter);
 router.delete("/:chapterId", authencation, permission([Role.ADMIN, Role.TEACHER]), chapterController.deleteChapter);
+router.get("/:chapterId", authencation, permission([Role.ADMIN, Role.TEACHER, Role.STUDENT]), chapterController.getChapter);
 router.get("/list-chapter/:bookId", authencation, permission([Role.ADMIN, Role.TEACHER, Role.STUDENT]), chapterController.getListChapterByBookId);
 
 
