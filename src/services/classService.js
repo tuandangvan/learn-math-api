@@ -180,6 +180,25 @@ const getBook_Chapter_Lesson = async function (classId) {
     return book;
 }
 
+const findListBook = async function (classId) {
+    const books = await Class.findOne({ _id: classId, deleted: false })
+        .select("books._id books.type books.name books.description books.image");
+    //doi _id thành bookId
+    const book = books.books.map(book => {
+        return {
+            bookId: book._id,
+            type: book.type,
+            name: book.name,
+            description: book.description,
+            image: book.image,
+            _id: undefined
+        };
+    });
+    return book;
+}
+
+
+
 export const classService = {
     //admin
     createClass,
@@ -191,6 +210,7 @@ export const classService = {
     findListClass,
     findClass,
     getBook_Chapter_Lesson,
+    findListBook,
 
     //teacher
     addTeacher,

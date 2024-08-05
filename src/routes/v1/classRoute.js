@@ -12,6 +12,8 @@ router.get('/list-class', classController.getListClass);
 router.get('/one-class/:classId', classController.getClass);
 router.get("/book/:bookId", authencation, permission([Role.ADMIN, Role.TEACHER, Role.STUDENT]), chapterController.getBook);
 router.get("/book/chapter/:classId", authencation, permission([Role.ADMIN, Role.TEACHER]), classController.getBook_Chapter_Lesson);
+router.get("/list-book/:classId", authencation, classController.getListBook);
+
 
 //admin
 router.post('/', authencation, permission(Role.ADMIN), classController.createClass);

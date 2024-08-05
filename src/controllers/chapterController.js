@@ -51,9 +51,21 @@ const getBook = async (req, res, next) => {
     }
 }
 
+const getListChapterByBookId = async (req, res, next) => {
+    try {
+        const bookId = req.params.bookId;
+        const chapters = await chapterService.findListChapterByBook(bookId);
+        sendSuccess(res, "Get chapters successfully", chapters);
+    } catch (error) {
+        sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
+    }
+}
+
 export const chapterController = {
     createChapter,
     editChapter,
     deleteChapter,
-    getBook
+    getBook,
+    getListChapterByBookId
 }
