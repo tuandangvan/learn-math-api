@@ -147,8 +147,11 @@ const getProfile = async (req, res, next) => {
 const getStudentOfClass = async (req, res, next) => {
     try {
         const classId = req.params.classId;
-        const listStudent = await accountService.findStudentOfClass(classId);
-        sendSuccess(res, "Get list student of class successfully", listStudent);
+        const page = req.query.page || 1;
+        const limit = req.query.limit || 10;
+        const { listStudent, total } = await accountService.findStudentOfClass(classId, page, limit);
+        sendSuccess(res, "Get list student of class successfully",
+            { listStudent, page: page, totalPage: Math.ceil(total / limit) });
     } catch (error) {
         sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
         next();
@@ -158,8 +161,24 @@ const getStudentOfClass = async (req, res, next) => {
 const getTeacherOfClass = async (req, res, next) => {
     try {
         const classId = req.params.classId;
-        const listTeacher = await accountService.findTeacherOfClass(classId);
-        sendSuccess(res, "Get list teacher of class successfully", listTeacher);
+        const page = req.query.page || 1;
+        const limit = req.query.limit || 10;
+        const { listTeacher, total } = await accountService.findTeacherOfClass(classId, page, limit);
+        sendSuccess(res, "Get list teacher of class successfully",
+            { listTeacher, page: page, totalPage: Math.ceil(total / limit) });
+    } catch (error) {
+        sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
+        next();
+    }
+}
+
+const findAccountForAdmin = async (req, res, next) => {
+    try {
+        const role = req.query.role || "STUDENT";
+        const page = req.query.page || 1;
+        const limit = req.query.limit || 10;
+        const { accounts, total } = await accountService.findAccountForAdmin(role, page, limit);
+        sendSuccess(res, `Get list ${role} success`, { accounts, page: page, totalPage: Math.ceil(total / limit) });
     } catch (error) {
         sendError(res, error.message, error.stack, StatusCodes.UNPROCESSABLE_ENTITY);
         next();
@@ -180,5 +199,6 @@ export const accountController = {
     editAccount,
     getProfile,
     getStudentOfClass,
-    getTeacherOfClass
+    getTeacherOfClass,
+    findAccountForAdmin
 }

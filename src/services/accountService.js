@@ -84,14 +84,18 @@ const updateAccount = async function (accountId, data) {
     const accountUpdate = await Account.updateOne({ _id: accountId }, { $set: { ...data } });
     return accountUpdate;
 }
-const findStudentOfClass = async function (classId) {
-    const listStudent = await Account.find({ classId: classId, role: Role.STUDENT });
-    return listStudent;
+const findStudentOfClass = async function (classId, page, limit) {
+    const listStudent = await Account.find({ classId: classId, role: Role.STUDENT, deleted: false },
+        { password: 0, refreshToken: 0, deleted: 0 }).skip((page - 1) * limit).limit(limit);
+    const total = await Account.countDocuments({ classId: classId, role: Role.STUDENT, deleted: false });
+    return { listStudent, total: total };
 }
 
-const findTeacherOfClass = async function (classId) {
-    const teacher = await Account.findOne({ classId: classId, role: Role.TEACHER });
-    return teacher;
+const findTeacherOfClass = async function (classId, page, limit) {
+    const listTeacher = await Account.findOne({ classId: classId, role: Role.TEACHER, deleted: false },
+        { password: 0, refreshToken: 0, deleted: 0 }).skip((page - 1) * limit).limit(limit);
+    const total = await Account.countDocuments({ classId: classId, role: Role.TEACHER, deleted: false });
+    return { listTeacher, total: total };
 }
 
 const findClassByAccountId = async function (accountId) {
@@ -110,6 +114,24 @@ const getClassByAccountId = async function (accountId) {
     return account.classId;
 }
 
+const findAccountForAdmin = async function (role, page, limit) {
+    const account = await Account.find({ role: role }, { password: 0, refreshToken: 0 }).skip((page - 1) * limit).limit(limit);
+    const accounts = account.map(account => {
+        return {
+            accountId: account._id,
+            ...account.toObject(),
+            _id: undefined // Loại bỏ trường _id
+        };
+    });
+    const total = await Account.countDocuments({ role: role });
+    return { accounts, total };
+}
+
+// const findStudentOfClass = async function (classId) {
+
+
+// }
+
 
 
 export const accountService = {
@@ -126,5 +148,6 @@ export const accountService = {
     findStudentOfClass,
     findTeacherOfClass,
     findClassByAccountId,
-    getClassByAccountId
+    getClassByAccountId,
+    findAccountForAdmin
 }
