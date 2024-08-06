@@ -30,9 +30,9 @@ const editExam = async (req, res, next) => {
         const data = req.body;
         const examId = req.params.examId;
         await examService.editExam(examId, data);
-        if (data.type === "LESSON") {
-            await chapterService.addExamToLesson(data.chapterId, data.lessonId, examId);
-        }
+        // if (data.type === "LESSON") {
+        //     await chapterService.addExamToLesson(data.chapterId, data.lessonId, examId);
+        // }
         sendSuccess(res, "Edit exam successfully", null);
     } catch (error) {
         sendError(res, error.message, error.stack, 400);
