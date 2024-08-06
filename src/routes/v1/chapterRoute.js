@@ -14,6 +14,7 @@ router.put("/:chapterId", authencation, permission([Role.ADMIN, Role.TEACHER]), 
 router.delete("/:chapterId", authencation, permission([Role.ADMIN, Role.TEACHER]), chapterController.deleteChapter);
 router.get("/:chapterId", authencation, permission([Role.ADMIN, Role.TEACHER, Role.STUDENT]), chapterController.getChapter);
 router.get("/list-chapter/:bookId", authencation, permission([Role.ADMIN, Role.TEACHER, Role.STUDENT]), chapterController.getListChapterByBookId);
+router.get("/book/public/:classId", chapterController.getBookPublic);
 
 
 

@@ -68,6 +68,23 @@ const findBook = async function (bookId) {
     return book;
 }
 
+const findBookPublic = async function (classId) {
+    const bookId = await Chapter.findOne({ classId: classId });
+    const book = await Chapter.find({ bookId: bookId.bookId, deleted: false })
+        .populate("teacherId", "firstName lastName avatar introduction email phone")
+        .populate("classId", "name description image");
+
+    // doi _id thanh bookId
+    const bookRS = book.map(b => {
+        return {
+            chapterId: b._id,
+            ...b.toObject(),
+            _id: undefined,
+        }
+    })
+    return bookRS;
+}
+
 const addExamToLesson = async function (chapterId, lessonId, examId) {
     const chapter = await Chapter.findOne({ _id: chapterId, "lessons._id": lessonId });
     if (!chapter) {
@@ -114,5 +131,6 @@ export const chapterService = {
     findBook,
     addExamToLesson,
     findListChapterByBook,
-    findChapterById
+    findChapterById,
+    findBookPublic
 }
