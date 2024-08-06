@@ -1,5 +1,3 @@
-import { StatusCodes } from "http-status-codes";
-import { chapterService } from "../services/chapterService";
 import { classService } from "../services/classService";
 import { examService } from "../services/examService";
 import { sendError, sendSuccess } from "../utils/Api";
