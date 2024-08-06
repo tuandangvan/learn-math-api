@@ -15,7 +15,7 @@ const examSchema = Schema(
         },
         bookId: {
             type: Schema.Types.ObjectId,
-            required: true,
+            default: null,
         },
         createBy: {
             type: Schema.Types.ObjectId,
