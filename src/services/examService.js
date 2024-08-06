@@ -107,6 +107,13 @@ const updateQuantity = async function (examId) {
     return updateQuantity;
 }
 
+const findExamCreater = async function (createBy, classId, type, page, limit) {
+    const exams = await Exam.find({ createBy: createBy, classId: classId, type: type, active: true, deleted: false },
+        { questions: 0, deleted: 0 }).skip((page - 1) * limit).limit(limit);
+    const count = await Exam.countDocuments({ createBy: createBy, classId: classId, type: type, active: true, deleted: false });
+    return { exams, count };
+}
+
 
 
 export const examService = {
@@ -118,5 +125,6 @@ export const examService = {
     getExamById,
     findExamById,
     // updateAttempts,
-    updateQuantity
+    updateQuantity,
+    findExamCreater
 }

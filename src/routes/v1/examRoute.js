@@ -11,5 +11,6 @@ router.put('/:examId', authencation, permission([Role.ADMIN, Role.TEACHER]), exa
 router.delete('/:examId', authencation, permission([Role.ADMIN, Role.TEACHER]), examController.deleteExam);
 router.get('/list/exams', authencation, permission([Role.ADMIN, Role.TEACHER, Role.STUDENT]), examController.getListExam);
 router.get('/:examId', authencation, permission([Role.ADMIN, Role.TEACHER, Role.STUDENT]), examController.getExamById);
+router.get('/list-exams/:classId', authencation, permission([Role.TEACHER]), examController.getExameByCreater);
 
 export const examRouter = router;
