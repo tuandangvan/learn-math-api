@@ -69,8 +69,8 @@ const findBook = async function (bookId) {
 }
 
 const findBookPublic = async function (classId) {
-    const bookId = await Chapter.findOne({ classId: classId });
-    const book = await Chapter.find({ bookId: bookId.bookId, deleted: false })
+    const _class = await Class.findOne({ _id: classId, deleted: false });
+    const book = await Chapter.find({ bookId: _class.books[0]._id, deleted: false })
         .populate("teacherId", "firstName lastName avatar introduction email phone")
         .populate("classId", "name description image");
 
