@@ -3,6 +3,7 @@ import Exam from '../models/examModel';
 
 const createExam = async function (data, createBy) {
     data.createBy = createBy;
+    data.bookId = data.bookId || null;
     const newExam = new Exam({
         _id: new mongoose.Types.ObjectId(),
         ...data
