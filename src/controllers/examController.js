@@ -150,10 +150,30 @@ const getExamById = async (req, res, next) => {
     }
 }
 
+const getExameByCreater = async (req, res, next) => {
+    try {
+        const classId = req.params.classId;
+        const type = req.query.type || 'LESSON';
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const acc = getTokenHeader(res, req, next);
+        const { exams, count } = await examService.findExamCreater(acc.id, classId, type, page, limit);
+        sendSuccess(res, "Get list exam successfully", {
+            listExams: exams,
+            page: page,
+            totalPage: Math.ceil(count / limit)
+        });
+    } catch (error) {
+        sendError(res, error.message, error.stack, 400);
+        next();
+    }
+}
+
 export const examController = {
     createExam,
     editExam,
     deleteExam,
     getListExam,
-    getExamById
+    getExamById,
+    getExameByCreater
 }
