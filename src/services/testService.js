@@ -85,7 +85,7 @@ const getTestCompletedById = async function (testId) {
                 typeQ: answer.typeQ,
                 question: question ? {
                     content: question.content,
-                    image: question.image,
+                    images: question.images,
                     answers: question.answers
                 } : null,
                 result: answer.result.map(res => {
