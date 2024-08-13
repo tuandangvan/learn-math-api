@@ -114,6 +114,7 @@ const getListExam = async (req, res, next) => {
 
             result.push({
                 ...exams[i].toObject(),
+                questions : undefined,
                 statusTest: statusTest,
                 listTest: testAttempt
             });
