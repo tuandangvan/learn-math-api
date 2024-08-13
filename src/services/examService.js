@@ -41,7 +41,7 @@ const getListExam = async function (type, classId) {
 }
 
 const getListExam2 = async function (type, classId, page, limit) {
-    const exams = await Exam.find({ type: type, classId: classId, active: true, deleted: false }, { questions: 0, deleted: 0 })
+    const exams = await Exam.find({ type: type, classId: classId, active: true, deleted: false }, { deleted: 0 })
         .skip((page - 1) * limit).limit(limit);
 
     const count = await Exam.countDocuments({ type: type, classId: classId, active: true, deleted: false });
